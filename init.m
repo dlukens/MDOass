@@ -6,7 +6,7 @@ inits.W_TO = 170500; %[kg]
 inits.W_fuel = 56330; %[kg]
 inits.rho = 0.389; % [kg/m^3] double check this
 inits.V = 234.587; %[m/s]
-inits.A = 260; %[m^2]
+inits.area = 260; %[m^2]
 inits.h = 10668; %[m]
 inits.M = inits.V/297.4;
 inits.MAC = 6.44; %[m]
@@ -23,7 +23,7 @@ order = 5;
 A = airfoilgen(order);
 
 %% Find CD_A-w
-CL = (2 * Ldes(inits.W_TO, inits.W_fuel) * 9.81)/(inits.rho * inits.V^2 * inits.A);
+CL = (2 * Ldes(inits.W_TO, inits.W_fuel) * 9.81)/(inits.rho * inits.V^2 * inits.area);
 
 [Res, copy] = Q3Dvis(CL, A, A, inits.c_r, inits.c_t, inits.b, inits.sweep);
 CLwing = Res.CLwing;
@@ -33,10 +33,11 @@ CD_AW = CLwing/inits.CLCD - CDwing;
 
 %% Find W_str
 
+EMWETmain;
 
 
 function A = airfoilgen(order)
-fid = fopen('airfoils/n64215.dat', 'r');
+fid = fopen('n64215.dat', 'r');
 
 global airfoil;
 airfoil = fscanf(fid, '%g %g', [2 Inf])';

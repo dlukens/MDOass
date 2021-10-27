@@ -6,9 +6,9 @@ close all
 
 %% Initialization
 
-
 init;
 
+return;
 %% Variables
 
 b       = 1; %[m]

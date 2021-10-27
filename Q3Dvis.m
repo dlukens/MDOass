@@ -2,8 +2,8 @@ function [Res, copy] = Q3Dvis(CL, A_r, A_t, c_r, c_t, b, sweep)
 %% Aerodynamic solver setting
 global inits;
 len = length(A_r);
-x_t = tan(deg2rad(sweep)) * b/2;
-x_k = tan(deg2rad(sweep)) * b/2*0.4;
+x_t = tand(sweep) * b/2;
+x_k = tand(sweep) * b/2*0.4;
 y_k = b/2*0.4;
 y_t = b/2;
 c_k = (c_r+c_t)/2;
@@ -63,6 +63,8 @@ copy.x_t = x_t;
 copy.y_k = y_k;
 copy.y_t = y_t;
 copy.c_k = c_k;
+copy.c_r = c_r;
+copy.c_t = c_t;
     
 
 end
