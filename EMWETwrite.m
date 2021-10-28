@@ -1,4 +1,4 @@
-%%%_____Routine to write the input file for the EMWET procedure______% %%
+%% Routine to write the input file for the EMWET procedure
 
 namefile    =    char('A300');
 MTOW        =    inits.W_TO;         %[kg]
@@ -52,3 +52,16 @@ fprintf(fid, '%g %g %g %g \n',E_al,rho_al,Ft_al,Fc_al);
 fprintf(fid,'%g %g \n',eff_factor,pitch_rib);
 fprintf(fid,'1 \n');
 fclose(fid);
+
+%% Writing .load file
+global copy;
+global inits;
+
+L = 0.5 * copy.ccl .* copy.Yst * inits.rho * inits.V ;
+
+
+fid = fopen('A300test.load','wt');
+fprintf(fid, '%g %g %g \n',MTOW,MZF);
+fclose(fid);
+
+

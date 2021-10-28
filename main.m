@@ -46,17 +46,15 @@ ub =[10, ... b,
      10, ... phi_t,  
      10, ... A_r,    
      10];%   A_t Upper bounds
+ 
 
 % Y_0 - Initial values
 global copy;
-
 copy.W_str  = 1;
 copy.W_fuel = 1;
 copy.CLCD   = 1;
 copy.cl     = 1;
 copy.cd     = 1;
-
-
 
 %% FMINCON
 options.Display = 'iter-detailed';

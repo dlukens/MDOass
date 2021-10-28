@@ -20,7 +20,6 @@ AC.Wing.inc  = 0;
 % Airfoil coefficients input matrix
 %                    | ->     upper curve coeff.    <-|  | ->   lower curve coeff.    <-| 
 AC.Wing.Airfoils   =   [A_r(1:len/2)' A_r(len/2+1:len)' ;
-                        A_t(1:len/2)' A_t(len/2+1:len)' ;
                         A_t(1:len/2)' A_t(len/2+1:len)'];
                   
 AC.Wing.eta = [0;0.4;1];  % Spanwise location of the airfoil sections
@@ -33,7 +32,7 @@ AC.Aero.MaxIterIndex = 150;    %Maximum number of Iteration for the
 AC.Aero.V     = inits.V;       % flight speed (m/s)
 AC.Aero.rho   = inits.rho;         % air density  (kg/m3)
 AC.Aero.alt   = inits.h;             % flight altitude (m)
-AC.Aero.Re    = inits.Re;        % reynolds number (based on mean aerodynamic chord)
+AC.Aero.Re    = inits.Re;        % reynolds number (based on mean aerodynamic chord) THIS CHANGES WITH MAC!!!
 AC.Aero.M     = inits.M;           % flight Mach number 
 AC.Aero.CL    = CL;          % lift coefficient - comment this line to run the code for given alpha%
 % AC.Aero.Alpha = 2;             % angle of attack -  comment this line to run the code for given cl 
@@ -50,13 +49,14 @@ figure
     axis ij
     axis equal
     % [x1,x2], [y1, y2]
-    plot([0,        b/2*0.4], [0,    x_k]);
+    plot([0,        b/2*0.4], [0,x_k]);
     plot([b/2*0.4,  b/2], [x_k,  x_t]);
     plot([b/2,      b/2], [x_t,  x_t + c_t]);
     plot([b/2,      b/2*0.4], [x_t + c_t,  c_r]);
     plot([b/2*0.4,  0], [c_r,  c_r]);
     
 %%
+
 global copy;
 copy.x_k = x_k;
 copy.x_t = x_t;
@@ -65,6 +65,10 @@ copy.y_t = y_t;
 copy.c_k = c_k;
 copy.c_r = c_r;
 copy.c_t = c_t;
+
+copy.Yst = Res.Wing.Yst;
+copy.ccl = Res.Wing.ccl;
+copy.cmc4 = Res.Wing.cm_c4;
     
 
 end

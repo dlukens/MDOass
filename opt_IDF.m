@@ -2,6 +2,7 @@ function [f] = opt_IDF(x)
 
 %     1   2     3     4    5      6     7    8
 %x = [b, sweep, c_r, c_t, phi_r, phi_t, A_r, A_t];
+x
 
 b = x(1);
 sweep = x(2);
@@ -14,9 +15,9 @@ A_t = x(17:26);
 
 
 CL = 0.5;
-[cl, cm] = Q3Dinv(CL, A_r, A_t);
+[cl, cm] = Q3Dinv(CL, A_r, A_t, inits.c_r, inits.c_t, inits.b, inits.sweep);
 W_str = EMWET(y1_c, z1, z2);
-CLCD = Q3Dvis(y1_c, z1, z2);
+CLCD = Q3Dvis(CL, A_r, A_t, inits.c_r, inits.c_t, inits.b, inits.sweep);
 W_fuel = Breguet(y1_c, z1, z2);
 
 f = objective(W_TO_0, W_AW, W_fuel, W_str);

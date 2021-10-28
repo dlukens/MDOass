@@ -18,7 +18,7 @@ inits.sweep = 28; %[deg]
 inits.CLCD = 16;
 
 
-%% Inititalise airfoil - whitcomb
+%% Inititalise airfoil - naca
 order = 5;
 A = airfoilgen(order);
 
@@ -29,12 +29,13 @@ CL = (2 * Ldes(inits.W_TO, inits.W_fuel) * 9.81)/(inits.rho * inits.V^2 * inits.
 CLwing = Res.CLwing;
 CDwing = Res.CDwing;
 
-CD_AW = CLwing/inits.CLCD - CDwing;
+inits.CD_AW = CLwing/inits.CLCD - CDwing;
 
 %% Find W_str
 
 EMWETmain;
 
+inits.W_str = weight.total;
 
 function A = airfoilgen(order)
 fid = fopen('n64215.dat', 'r');
@@ -65,7 +66,7 @@ x = fminunc(@(x)CST_objective(x, airfoil), x0);
 
 Au = x(1:length(x)/2);
 Al = x(length(x)/2 + 1:length(x));
-A = [Au; Al];                               %potential refactorization here
+A = [Au; Al];                               %potential refactor here
 
 [Xtu,~] = D_airfoil2(Au, Al, airfoil_xu);
 [~,Xtl] = D_airfoil2(Au, Al, airfoil_xl);
@@ -97,6 +98,3 @@ axis([0,1,-0.5,0.5]);
 
     end
 end
-
-
-
