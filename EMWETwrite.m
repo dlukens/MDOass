@@ -54,10 +54,8 @@ fprintf(fid,'1 \n');
 fclose(fid);
 
 %% Writing .load file
-global copy;
 global inits;
 
-% L = 0.5 * copy.ccl .* copy.Yst * inits.rho * inits.V^2 ;
 
 
 Yp = zeros(length(ResVis.Wing.Yst), 1);
@@ -66,30 +64,16 @@ for i = 2:length(ResVis.Wing.Yst)
 end
 Yp(end+1) = inits.b/2;
 
-CLp = zeros(length(Yp), 1);
-for i = 2:length(Yp)-1
-    CLp(i) = (ResVis.Wing.cl(i-1) + ResVis.Wing.cl(i))/2;
+for i = 1:length(Yp)-1
+    Ydis(i) = Yp(i+1) - Yp(i);
 end
+Ydis = Ydis';
 
-CMp = zeros(length(Yp), 1);
-for i = 2:length(Yp)-1
-    CMp(i) = (ResVis.Wing.cm_c4(i-1) + ResVis.Wing.cm_c4(i))/2;
-end
+Lp = 0.5 * ResVis.Wing.ccl .* Ydis * inits.rho * inits.V^2;
+Mp = 0.5 * ResVis.Wing.cm_c4 .* Ydis .* ResVis.Wing.chord.^2 * inits.rho * inits.V^2;
 
-CMp = flip(CMp);
-CLp = flip(CLp);
-    
-figure
-    hold on
-    plot(Yp/(inits.b/2), CLp, '-o');
-    
-figure
-    hold on
-    plot(Yp/(inits.b/2), CMp, '-o');
 
-B = [2*Yp/inits.b, CLp, CMp];
+B = [2*ResVis.Wing.Yst/inits.b, Lp, Mp];
 fid = fopen('A300.load','wt');
 fprintf(fid, '%g %g %g \n',B');
 fclose(fid);
-
-
