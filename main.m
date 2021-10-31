@@ -11,7 +11,7 @@ init;
 return;
 %% Variables
 
-b       = 1; %[m]
+b       = 6; %[m]
 sweep   = 1; %[deg]
 c_r     = 1; %[m]
 c_t     = 1; %[m]
