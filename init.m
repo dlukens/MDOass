@@ -25,9 +25,9 @@ A = airfoilgen(order);
 %% Find CD_A-w
 CL = (2 * Ldes(inits.W_TO, inits.W_fuel) * 9.81)/(inits.rho * inits.V^2 * inits.area);
 
-[Res, copy] = Q3Dvis(CL, A, A, inits.c_r, inits.c_t, inits.b, inits.sweep);
-CLwing = Res.CLwing;
-CDwing = Res.CDwing;
+[ResVis, copy] = Q3Dvis(CL, A, A, inits.c_r, inits.c_t, inits.b, inits.sweep);
+CLwing = ResVis.CLwing;
+CDwing = ResVis.CDwing;
 
 inits.CD_AW = CLwing/inits.CLCD - CDwing;
 
@@ -55,7 +55,6 @@ figure;
 hold on;
 plot(airfoil_upper(:, 1), airfoil_upper(:, 2), '-');
 plot(airfoil_lower(:, 1), airfoil_lower(:, 2), '-r');
-
 
 %% Optimisation
 M = (order + 1)  * 2;
@@ -95,6 +94,5 @@ axis([0,1,-0.5,0.5]);
         diffu = sum((airfoil_upper(:, 2) - Xtu(:, 2)).^2);
         diffl = sum((airfoil_lower(:, 2) - Xtl(:, 2)).^2);
         error = diffu + diffl;
-
     end
 end

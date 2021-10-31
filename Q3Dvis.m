@@ -1,12 +1,11 @@
 function [Res, copy] = Q3Dvis(CL, A_r, A_t, c_r, c_t, b, sweep)
 %% Aerodynamic solver setting
 global inits;
-len = length(A_r);
 x_t = tand(sweep) * b/2;
 x_k = tand(sweep) * b/2*0.4;
 y_k = b/2*0.4;
 y_t = b/2;
-c_k = (c_r+c_t)/2;
+c_k = c_r - x_k - 0.00001;
 
 % Wing planform geometry 
 %                x      y       z   chord(m)    twist angle (deg) 
@@ -19,8 +18,8 @@ AC.Wing.inc  = 0;
             
 % Airfoil coefficients input matrix
 %                    | ->     upper curve coeff.    <-|  | ->   lower curve coeff.    <-| 
-AC.Wing.Airfoils   =   [A_r(1:len/2)' A_r(len/2+1:len)' ;
-                        A_t(1:len/2)' A_t(len/2+1:len)'];
+AC.Wing.Airfoils   =   [A_r' ;
+                        A_t'];
                   
 AC.Wing.eta = [0;0.4;1];  % Spanwise location of the airfoil sections
 
@@ -48,12 +47,12 @@ figure
     hold on
     axis ij
     axis equal
-    % [x1,x2], [y1, y2]
-    plot([0,        b/2*0.4], [0,x_k]);
-    plot([b/2*0.4,  b/2], [x_k,  x_t]);
-    plot([b/2,      b/2], [x_t,  x_t + c_t]);
-    plot([b/2,      b/2*0.4], [x_t + c_t,  c_r]);
-    plot([b/2*0.4,  0], [c_r,  c_r]);
+    %  [y1, y2], [x1,x2]
+    plot([0,    y_k], [0,          x_k]);
+    plot([y_k,  y_t], [x_k,        x_t]);
+    plot([y_t,  y_t], [x_t,  x_t + c_t]);
+    plot([y_t,  y_k], [x_t + c_t,  c_r]);
+    plot([y_k,  0],   [c_r,        c_r]);
     
 %%
 

@@ -7,7 +7,7 @@ nz_max      =    2.5;
 span        =    inits.b;         %[m]
 root_chord  =    copy.c_r;           %[m]   
 wing_surf   =    inits.area;
-sweep_le    =    5;             %[deg]
+sweep_le    =    25;             %[deg]
 spar_front  =    0.2;
 spar_rear   =    0.8;
 ftank_start =    0.1;
@@ -57,11 +57,39 @@ fclose(fid);
 global copy;
 global inits;
 
-L = 0.5 * copy.ccl .* copy.Yst * inits.rho * inits.V ;
+% L = 0.5 * copy.ccl .* copy.Yst * inits.rho * inits.V^2 ;
 
 
-fid = fopen('A300test.load','wt');
-fprintf(fid, '%g %g %g \n',MTOW,MZF);
+Yp = zeros(length(ResVis.Wing.Yst), 1);
+for i = 2:length(ResVis.Wing.Yst)
+    Yp(i) = ResVis.Wing.Yst(i-1) + (ResVis.Wing.Yst(i) - ResVis.Wing.Yst(i-1))/2;
+end
+Yp(end+1) = inits.b/2;
+
+CLp = zeros(length(Yp), 1);
+for i = 2:length(Yp)-1
+    CLp(i) = (ResVis.Wing.cl(i-1) + ResVis.Wing.cl(i))/2;
+end
+
+CMp = zeros(length(Yp), 1);
+for i = 2:length(Yp)-1
+    CMp(i) = (ResVis.Wing.cm_c4(i-1) + ResVis.Wing.cm_c4(i))/2;
+end
+
+CMp = flip(CMp);
+CLp = flip(CLp);
+    
+figure
+    hold on
+    plot(Yp/(inits.b/2), CLp, '-o');
+    
+figure
+    hold on
+    plot(Yp/(inits.b/2), CMp, '-o');
+
+B = [2*Yp/inits.b, CLp, CMp];
+fid = fopen('A300.load','wt');
+fprintf(fid, '%g %g %g \n',B');
 fclose(fid);
 
 
