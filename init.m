@@ -4,6 +4,7 @@
 global inits;
 inits.W_TO = 170500; %[kg]
 inits.W_fuel = 56330; %[kg]
+inits.W_str = 0.14*170500; %[kg]
 inits.rho = 0.389; % [kg/m^3] double check this
 inits.V = 234.587; %[m/s]
 inits.area = 260; %[m^2]
@@ -16,11 +17,16 @@ inits.c_r = 10; %[m]
 inits.c_t = inits.c_r/3; %[m]
 inits.sweep = 28; %[deg]
 inits.CLCD = 16;
+inits.Ct = 1.8639*10^(-4);  %[N/Ns]
+inits.R = 7408000;  %[m]
+inits.rho_fuel = 817.15;     %[kg/m^3]
 
 
 %% Inititalise airfoil - naca
 order = 5;
 A = airfoilgen(order);
+
+inits.A=A;
 
 %% Find CD_A-w
 CL = (2 * Ldes(inits.W_TO, inits.W_fuel) * 9.81)/(inits.rho * inits.V^2 * inits.area);
@@ -66,6 +72,7 @@ x = fminunc(@(x)CST_objective(x, airfoil), x0);
 Au = x(1:length(x)/2);
 Al = x(length(x)/2 + 1:length(x));
 A = [Au; Al];                               %potential refactor here
+
 
 [Xtu,~] = D_airfoil2(Au, Al, airfoil_xu);
 [~,Xtl] = D_airfoil2(Au, Al, airfoil_xl);

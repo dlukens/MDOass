@@ -1,5 +1,9 @@
+%     1   2     3     4    5      6     7    8
+%x = [b, sweep, c_r, c_t, phi_k, phi_t, A_r, A_t];
+
 function [Res, copy] = Q3Dinv(CL, A_r, A_t, c_r, c_t, b, sweep)
 %% Aerodynamic solver setting
+
 global inits;
 x_t = tand(sweep) * b/2;
 x_k = tand(sweep) * b/2*0.4;
@@ -18,8 +22,8 @@ AC.Wing.inc  = 0;
             
 % Airfoil coefficients input matrix
 %                    | ->     upper curve coeff.    <-|  | ->   lower curve coeff.    <-| 
-AC.Wing.Airfoils   =   [A_r' ;
-                        A_t'];
+AC.Wing.Airfoils   =   [A_r ;
+                        A_t];
                   
 AC.Wing.eta = [0;0.4;1];  % Spanwise location of the airfoil sections
 

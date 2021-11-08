@@ -1,17 +1,8 @@
-function [f] = opt_IDF(x,y0)
+function [f] = opt_IDF(x,y)
 
-global copy;
-
-if copy.y==0;
-    y=y0
-    
-else
-    y=copy.y
-    
 global inits;
-inits.y=y;
 x0_=inits.x0_;
-
+inits.y=y
 %     1   2     3     4    5      6     7    8
 %x = [b, sweep, c_r, c_t, phi_k, phi_t, A_r, A_t];
 x
@@ -42,13 +33,12 @@ W_fuel, V_fuel = Breguet(W_to,CLCD);
 
 f = objective(W_TO_0, W_AW, W_fuel, W_str);
 
-yc= [W_TO;
-    W_str;
-    W_fuel;
-    CLCD;
-    cl;
-    cd];
-
-copy.y=yc;
+global copy;
+copy.W_fuel = W_fuel;
+copy.W_str = W_str;
+copy.W_TO = W_TO;
+copy.cl = cl;
+copy.cd = cd;
+copy.CLCD = CLCD;
 
 end

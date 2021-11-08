@@ -1,12 +1,12 @@
-function [c, ceq] = constraints(x)
+function [c, ceq] = constraints(x,y)
+
+W_to=y(1);
+W_str=y(2);
+W_fuel=y(3);
+CLCD=y(4);
 
 y1_c = x(4);
 y2_c = x(5);
-
-global copy;
-W_fuel = copy.W_fuel;
-W_str = copy.W_str;
-W_TO = copy.W_TO;
 
 rho_fuel = 0.81715e3; %[kg/m3]
 f_tank = 0.93;
