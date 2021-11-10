@@ -1,4 +1,4 @@
-function [Res, copy] = Q3Dinv(CL, A_r, A_t, c_r, c_t, b, sweep)
+function Res = Q3Dinv(CL, A_r, A_t, c_r, c_t, b, sweep)
 %% Aerodynamic solver setting
 global inits;
 x_t = tand(sweep) * b/2;
@@ -43,32 +43,17 @@ Res = Q3D_solver(AC);
 toc
 
 %%
-figure
-    hold on
-    axis ij
-    axis equal
-    % [x1,x2], [y1, y2]
-    plot([0,        b/2*0.4], [0,x_k]);
-    plot([b/2*0.4,  b/2], [x_k,  x_t]);
-    plot([b/2,      b/2], [x_t,  x_t + c_t]);
-    plot([b/2,      b/2*0.4], [x_t + c_t,  c_r]);
-    plot([b/2*0.4,  0], [c_r,  c_r]);
-    
-%%
-
-global copy;
-copy.x_k = x_k;
-copy.x_t = x_t;
-copy.y_k = y_k;
-copy.y_t = y_t;
-copy.c_k = c_k;
-copy.c_r = c_r;
-copy.c_t = c_t;
-
-copy.Yst = Res.Wing.Yst;
-copy.ccl = Res.Wing.ccl;
-copy.cmc4 = Res.Wing.cm_c4;
-    
+% figure
+%     hold on
+%     axis ij
+%     axis equal
+%     % [x1,x2], [y1, y2]
+%     plot([0,        b/2*0.4], [0,x_k]);
+%     plot([b/2*0.4,  b/2], [x_k,  x_t]);
+%     plot([b/2,      b/2], [x_t,  x_t + c_t]);
+%     plot([b/2,      b/2*0.4], [x_t + c_t,  c_r]);
+%     plot([b/2*0.4,  0], [c_r,  c_r]);
+        
 
 end
 

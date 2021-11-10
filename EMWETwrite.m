@@ -1,13 +1,15 @@
+function [] = EMWETwrite(W_TO, W_fuel, b, c_r, c_t, area, sweep, Yst, ccldist, cmdist, chords)
+global inits;
+
+%this can be refactored
+
 %% Routine to write the input file for the EMWET procedure
 
-namefile    =    char('A300');
-MTOW        =    inits.W_TO;         %[kg]
-MZF         =    inits.W_TO - inits.W_fuel;         %[kg]
+MTOW        =    W_TO;         %[kg]
+MZF         =    W_TO - W_fuel;         %[kg]
 nz_max      =    2.5;   
-span        =    inits.b;         %[m]
-root_chord  =    copy.c_r;           %[m]   
-wing_surf   =    inits.area;
-sweep_le    =    25;             %[deg]
+span        =    b;         %[m]
+wing_surf   =    area;
 spar_front  =    0.2;
 spar_rear   =    0.8;
 ftank_start =    0.1;
@@ -26,6 +28,13 @@ section_num =    3;
 airfoil_num =    3;
 
 
+x_t = tand(sweep) * b/2;
+x_k = tand(sweep) * b/2*0.4;
+y_k = b/2*0.4;
+y_t = b/2;
+c_k = c_r - x_k;
+
+
 fid = fopen('A300.init','wt');
 fprintf(fid, '%g %g \n',MTOW,MZF);
 fprintf(fid, '%g \n',nz_max);
@@ -35,9 +44,9 @@ fprintf(fid, '%g %g %g %g \n',wing_surf,span,section_num,airfoil_num);
 fprintf(fid, '0   %s \n',Airfoil);
 fprintf(fid, '0.4 %s \n',Airfoil);
 fprintf(fid, '1   %s \n',Airfoil);
-fprintf(fid, '%g %g %g %g %g %g \n',copy.c_r,0,0,0,spar_front,spar_rear);
-fprintf(fid, '%g %g %g %g %g %g \n',copy.c_k,copy.x_k,copy.y_k,0,spar_front,spar_rear);
-fprintf(fid, '%g %g %g %g %g %g \n',copy.c_t,copy.x_t,copy.y_t,0,spar_front,spar_rear);
+fprintf(fid, '%g %g %g %g %g %g \n',c_r,0,0,0,spar_front,spar_rear);
+fprintf(fid, '%g %g %g %g %g %g \n',c_k, x_k ,y_k,0,spar_front,spar_rear);
+fprintf(fid, '%g %g %g %g %g %g \n',c_t,x_t,y_t,0,spar_front,spar_rear);
 
 fprintf(fid, '%g %g \n',ftank_start,ftank_end);
 
@@ -54,26 +63,17 @@ fprintf(fid,'1 \n');
 fclose(fid);
 
 %% Writing .load file
-global inits;
 
+q = 0.5 * inits.rho * inits.V^2;
+MAC = (c_r + c_t) / 2; %TEMPORARY
 
+inter_points = linspace(0,1,15);
+L_dist = interp1(Yst, ccldist*q, inter_points*b/2, 'spline');
+M_dist = interp1(Yst, cmdist.*chords*MAC*q, inter_points*b/2, 'spline');
 
-Yp = zeros(length(ResVis.Wing.Yst), 1);
-for i = 2:length(ResVis.Wing.Yst)
-    Yp(i) = ResVis.Wing.Yst(i-1) + (ResVis.Wing.Yst(i) - ResVis.Wing.Yst(i-1))/2;
-end
-Yp(end+1) = inits.b/2;
-
-for i = 1:length(Yp)-1
-    Ydis(i) = Yp(i+1) - Yp(i);
-end
-Ydis = Ydis';
-
-Lp = 0.5 * ResVis.Wing.ccl .* Ydis * inits.rho * inits.V^2;
-Mp = 0.5 * ResVis.Wing.cm_c4 .* Ydis .* ResVis.Wing.chord.^2 * inits.rho * inits.V^2;
-
-
-B = [2*ResVis.Wing.Yst/inits.b, Lp, Mp];
+B = [inter_points; L_dist; M_dist];
 fid = fopen('A300.load','wt');
-fprintf(fid, '%g %g %g \n',B');
+fprintf(fid, '%g %g %g \n',B);
 fclose(fid);
+
+end
