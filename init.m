@@ -1,6 +1,3 @@
-%Variables
-
-
 global inits;
 inits.W_TO = 170500; %[kg]
 inits.W_fuel = 56330; %[kg]
@@ -36,13 +33,12 @@ inits.CD_AW = CLwing/inits.CLCD - CDwing;
 %% Find W_str
 
 inits.W_str = EMWETmain(inits.W_TO, inits.W_fuel, inits.b, inits.c_r, inits.c_t, ...
-                        inits.area, inits.sweep, inits.L_poly, inits.M_poly);
+                        inits.area, inits.sweep, inits.A, inits.A, inits.L_poly, inits.M_poly);
 
 inits.W_AW = inits.W_TO - inits.W_fuel - inits.W_str;
 
 function A = airfoilgen(order)
 fid = fopen('n64215.dat', 'r');
-
 global airfoil;
 airfoil = fscanf(fid, '%g %g', [2 Inf])';
 fclose(fid);
@@ -59,8 +55,8 @@ airfoil_xl = airfoil_lower(:, 1);
 % plot(airfoil_upper(:, 1), airfoil_upper(:, 2), '-');
 % plot(airfoil_lower(:, 1), airfoil_lower(:, 2), '-r');
 
-%% Optimisation
-M = (order + 1)  * 2;
+% Optimisation
+M = (order + 1) * 2;
 x0 = 1 * ones(M, 1);
 options=optimset('Display', 'none');
 
@@ -70,8 +66,8 @@ Au = x(1:length(x)/2);
 Al = x(length(x)/2 + 1:length(x));
 A = [Au; Al];                               %potential refactor here
 
-[Xtu,~] = D_airfoil2(Au, Al, airfoil_xu);
-[~,Xtl] = D_airfoil2(Au, Al, airfoil_xl);
+% [Xtu,~] = D_airfoil2(Au, Al, airfoil_xu);
+% [~,Xtl] = D_airfoil2(Au, Al, airfoil_xl);
 
 % plot(Xtu(:,1),Xtu(:,2),'xb');    %plot upper surface airfoilds
 % plot(Xtl(:,1),Xtl(:,2),'xr');    %plot lower surface airfoilds

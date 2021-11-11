@@ -4,9 +4,9 @@ tic
 global copy;
 global inits;
 
-fprintf('\t ---- F-count: %d ----\n', copy.iter);
+fprintf('\t ---- F-count: %d ---- \n', copy.iter);
 
-disp(x)
+disp(x)  %for monitoring
 copy.papi = x;
 
 b = x(1)*inits.b;
@@ -34,10 +34,13 @@ A1 = ((c_r + c_k) * 0.4 * b / 2) / 2;
 A2 = (c_k + c_t) * (x_t - x_k) / 2;
 area = A1 + A2;
 
+%% Blocks
+
 CL = 0.5; %This must be computed.
 [copy.L_poly, copy.M_poly] = Q3Dinv(CL, A_r, A_t, c_r, c_t, b, sweep);
 
-copy.W_str = EMWETmain(W_TO, W_fuel, b, c_r, c_t, area, sweep, L_poly, M_poly);
+%temporary to monitor airfoils
+[copy.W_str, Yu_r, Yl_r, Yu_t, Yl_t] = EMWETmain(W_TO, W_fuel, b, c_r, c_t, area, sweep, A_r, A_t, L_poly, M_poly);
 
 [CLwing, CDwing] = Q3Dvis(CL, A_r, A_t, c_r, c_t, b, sweep);
 copy.CLCD = CLwing/CDwing;
@@ -48,17 +51,34 @@ f = double(objective(copy.W_fuel, copy.W_str));
 
 copy.iter = copy.iter + 1;
 
-if mod(copy.iter,2) == 0
+%% Plots
+
+if mod(copy.iter,1) == 5
     figure
-    hold on
-    axis ij
-    axis equal
-    %  [y1, y2], [x1,x2]
-    plot([0,    y_k], [0,          x_k]);
-    plot([y_k,  y_t], [x_k,        x_t]);
-    plot([y_t,  y_t], [x_t,  x_t + c_t]);
-    plot([y_t,  y_k], [x_t + c_t,  c_r]);
-    plot([y_k,  0],   [c_r,        c_r]);
+        subplot(3,1,1)
+            title('Planform')
+            hold on
+            axis ij
+            axis equal
+            %  [y1, y2], [x1,x2]
+            plot([0,    y_k], [0,          x_k]);
+            plot([y_k,  y_t], [x_k,        x_t]);
+            plot([y_t,  y_t], [x_t,  x_t + c_t]);
+            plot([y_t,  y_k], [x_t + c_t,  c_r]);
+            plot([y_k,  0],   [c_r,        c_r]);
+            axis([0,30,-2,20])
+        subplot(3,1,2)
+            title('Root airfoil')
+            hold on
+            plot(Yu_r(:,1),Yu_r(:,2),'b');
+            plot(Yl_r(:,1),Yl_r(:,2),'r');
+            axis([0,1,-0.25,0.25])
+        subplot(3,1,3)
+            title('Tip Airfoil')
+            hold on
+            plot(Yu_t(:,1),Yu_t(:,2),'b');
+            plot(Yl_t(:,1),Yl_t(:,2),'r');
+            axis([0,1,-0.25,0.25])
 end
 
 toc

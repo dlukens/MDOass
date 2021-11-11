@@ -1,6 +1,3 @@
-%Variables
-
-
 global inits;
 inits.W_TO = 170500; %[kg]
 inits.W_fuel = 56330; %[kg]
@@ -29,22 +26,14 @@ inits.A = airfoilgen(order);
 CL = (2 * Ldes(inits.W_TO, inits.W_fuel) * 9.81)/(inits.rho * inits.V^2 * inits.area);
 
 [CLwing, CDwing] = Q3Dvis(CL, inits.A, inits.A, inits.c_r, inits.c_t, inits.b, inits.sweep);
-[copy.L_poly, copy.M_poly] = Q3Dinv(CL, inits.A_r, inits.A_t, inits.c_r, c_t, b, sweep);
-
-q = 0.5 * inits.rho * inits.V^2;
-points = linspace(0,1,15);
-L_dist = interp1(ResVis.Wing.Yst, ResVis.Wing.ccl*q, points*inits.b/2, 'spline');
-M_dist = interp1(ResVis.Wing.Yst, ResVis.Wing.cm_c4.*ResVis.Wing.chord*inits.MAC*q, points*inits.b/2, 'spline');
-
-inits.L_poly = polyfit(points*inits.b/2, L_dist, 4);
-inits.M_poly = polyfit(points*inits.b/2, M_dist, 4);
+[inits.L_poly, inits.M_poly] = Q3Dinv(CL, inits.A, inits.A, inits.c_r, inits.c_t, inits.b, inits.sweep);
 
 inits.CD_AW = CLwing/inits.CLCD - CDwing;
 
 %% Find W_str
 
 inits.W_str = EMWETmain(inits.W_TO, inits.W_fuel, inits.b, inits.c_r, inits.c_t, ...
-                        inits.area, inits.sweep, inits.L_poly, inits.M_poly);
+                        inits.area, inits.sweep, inits.A, inits.A, inits.L_poly, inits.M_poly);
 
 inits.W_AW = inits.W_TO - inits.W_fuel - inits.W_str;
 
@@ -67,8 +56,8 @@ airfoil_xl = airfoil_lower(:, 1);
 % plot(airfoil_upper(:, 1), airfoil_upper(:, 2), '-');
 % plot(airfoil_lower(:, 1), airfoil_lower(:, 2), '-r');
 
-%% Optimisation
-M = (order + 1)  * 2;
+% Optimisation
+M = (order + 1) * 2;
 x0 = 1 * ones(M, 1);
 options=optimset('Display', 'none');
 

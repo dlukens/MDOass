@@ -4,16 +4,14 @@ close all
 %AIRBUS A300-600R
 
 %% Initialization
-fprintf('\t ---- Initialising ----')
+fprintf('\t ---- Initialising ---- \n')
 tic;
 init;
 
 %% Variables
 global copy;
 copy = inits;
-
 copy.iter = 1;
-
 
 x0 = [copy.b;    
     copy.sweep;  
@@ -53,16 +51,16 @@ ub(7:30) = 2;  %cst coefficients
 ub(31:end) = 2; % Y vector %Probably wanna tighten this
 
 toc;
-fprintf('\t ---- FMINCON Start ----')
+fprintf('\t ---- FMINCON Start ---- \n')
 
 %% FMINCON
 options.Display = 'iter-detailed';
 options.Algorithm = 'sqp';
-options.OutputFcn = 'funccount'; 
+% options.OutputFcn = 'funccount';  that doesnt work
 options.PlotFcns = {'optimplotfval',@optimplotfval, @optimplotx, @optimplotfirstorderopt, @optimplotconstrviolation, @optimplotfunccount};
 options.FunValCheck = 'off'; 
 options.DiffMaxChange = 0.5;           %max 50 percent change in design variable
-options.DiffMinChange = 0.05;           %min 5% change in function while gradient searching
+options.DiffMinChange = 0.01;           %min 1% change in function while gradient searching
 options.TolFun = 0.01;       % convergence criteria is when the minimized weight is withing 1 percent of original
 options.TolX = 0.0005;         % end optimization if design variable only changes by 0.05 percent
 options.TolCon = 0.001;       % constraint convergence criteria

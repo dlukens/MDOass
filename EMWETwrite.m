@@ -19,9 +19,10 @@ Ft_al       =    2.95E8;        %N/m2
 Fc_al       =    2.95E8;        %N/m2
 pitch_rib   =    0.5;          %[m]
 eff_factor  =    0.96;             %Depend on the stringer type
-Airfoil     =    'n64215';
+Airfoil_root=    'FOIL_root';
+Airfoil_tip =    'FOIL_tip';
 section_num =    3;
-airfoil_num =    3;
+airfoil_num =    2;
 
 
 x_t = tand(sweep) * b/2;
@@ -37,9 +38,8 @@ fprintf(fid, '%g \n',nz_max);
 
 fprintf(fid, '%g %g %g %g \n',wing_surf,span,section_num,airfoil_num);
 
-fprintf(fid, '0   %s \n',Airfoil);
-fprintf(fid, '0.4 %s \n',Airfoil);
-fprintf(fid, '1   %s \n',Airfoil);
+fprintf(fid, '0   %s \n',Airfoil_root);
+fprintf(fid, '1   %s \n',Airfoil_tip);
 fprintf(fid, '%g %g %g %g %g %g \n',c_r,0,0,0,spar_front,spar_rear);
 fprintf(fid, '%g %g %g %g %g %g \n',c_k, x_k ,y_k,0,spar_front,spar_rear);
 fprintf(fid, '%g %g %g %g %g %g \n',c_t,x_t,y_t,0,spar_front,spar_rear);
