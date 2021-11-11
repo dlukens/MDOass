@@ -1,8 +1,4 @@
-function [] = EMWETwrite(W_TO, W_fuel, b, c_r, c_t, area, sweep, Yst, ccldist, cmdist, chords)
-global inits;
-
-%this can be refactored
-
+function [] = EMWETwrite(W_TO, W_fuel, b, c_r, c_t, area, sweep, L_poly, M_poly)
 %% Routine to write the input file for the EMWET procedure
 
 MTOW        =    W_TO;         %[kg]
@@ -59,19 +55,17 @@ fprintf(fid, '%g %g %g %g \n',E_al,rho_al,Ft_al,Fc_al);
 fprintf(fid, '%g %g %g %g \n',E_al,rho_al,Ft_al,Fc_al);
 
 fprintf(fid,'%g %g \n',eff_factor,pitch_rib);
-fprintf(fid,'1 \n');
+fprintf(fid,'0 \n');
 fclose(fid);
 
 %% Writing .load file
 
-q = 0.5 * inits.rho * inits.V^2;
-MAC = (c_r + c_t) / 2; %TEMPORARY
+points = linspace(0,1,15);
+L_dist = polyval(L_poly, points*b/2);
+M_dist = polyval(M_poly, points*b/2);
 
-inter_points = linspace(0,1,15);
-L_dist = interp1(Yst, ccldist*q, inter_points*b/2, 'spline');
-M_dist = interp1(Yst, cmdist.*chords*MAC*q, inter_points*b/2, 'spline');
 
-B = [inter_points; L_dist; M_dist];
+B = [points; L_dist; M_dist];
 fid = fopen('A300.load','wt');
 fprintf(fid, '%g %g %g \n',B);
 fclose(fid);

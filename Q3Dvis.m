@@ -38,9 +38,7 @@ AC.Aero.CL    = CL;          % lift coefficient - comment this line to run the c
 
 
 %% 
-tic
 Res = Q3D_solver(AC);
-toc
 
 if isnan(Res.CDwing)
    Res.CDwing = 100;

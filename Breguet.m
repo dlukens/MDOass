@@ -1,4 +1,4 @@
-function [W_fuel, V_fuel]=Breguet(W_TO,CLCD)
+function [W_fuel, V_fuel] = Breguet(W_TO,CLCD)
 
 global inits;
 Ct = 1.8639e-4;

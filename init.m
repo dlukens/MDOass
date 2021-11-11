@@ -32,17 +32,22 @@ ResVis = Q3Dvis(CL, inits.A, inits.A, inits.c_r, inits.c_t, inits.b, inits.sweep
 CLwing = ResVis.CLwing;
 CDwing = ResVis.CDwing;
 
+q = 0.5 * inits.rho * inits.V^2;
+MAC = (inits.c_r + inits.c_t) / 2; %TEMPORARY
+
+points = linspace(0,1,15);
+L_dist = interp1(ResVis.Wing.Yst, ResVis.Wing.ccl*q, points*inits.b/2, 'spline');
+M_dist = interp1(ResVis.Wing.Yst, ResVis.Wing.cm_c4.*ResVis.Wing.chord*MAC*q, points*inits.b/2, 'spline');
+
+inits.L_poly = polyfit(points*inits.b/2, L_dist, 4);
+inits.M_poly = polyfit(points*inits.b/2, M_dist, 4);
+
 inits.CD_AW = CLwing/inits.CLCD - CDwing;
-inits.cldist = ResVis.Wing.cl;
-inits.ccldist = ResVis.Wing.ccl;
-inits.cmdist = ResVis.Wing.cm_c4;
-inits.chords = ResVis.Wing.chord;
-inits.Yst = ResVis.Wing.Yst;
 
 %% Find W_str
 
-inits.W_str = EMWETmain(inits.W_TO, inits.W_fuel, inits.b, inits.c_r, inits.c_t, inits.area, ...
-    inits.sweep, inits.Yst, inits.ccldist, inits.cmdist, inits.chords);
+inits.W_str = EMWETmain(inits.W_TO, inits.W_fuel, inits.b, inits.c_r, inits.c_t, ...
+                        inits.area, inits.sweep, inits.L_poly, inits.M_poly);
 
 inits.W_AW = inits.W_TO - inits.W_fuel - inits.W_str;
 

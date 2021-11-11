@@ -1,7 +1,7 @@
-function W_str = EMWETmain(W_TO, W_fuel, b, c_r, c_t, area, sweep, Yst, ccldist, cmdist, chords)
+function W_str = EMWETmain(W_TO, W_fuel, b, c_r, c_t, area, sweep, L_poly, M_poly)
     %% Write .init and .load file
 
-    EMWETwrite(W_TO, W_fuel, b, c_r, c_t, area, sweep, Yst, ccldist, cmdist, chords);
+    EMWETwrite(W_TO, W_fuel, b, c_r, c_t, area, sweep, L_poly, M_poly);
 
     %% Run EMWET
 

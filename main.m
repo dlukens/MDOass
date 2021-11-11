@@ -1,5 +1,5 @@
 clc
-clear all
+clear
 close all
 
 %AIRBUS A300-600R
@@ -8,25 +8,20 @@ close all
 
 init;
 
+disp('initialised')
+
 %% Variables
 global copy;
 copy = inits;
-A       = copy.A;
-b       = copy.b; %[m]
-sweep   = copy.sweep; %[deg]
-c_r     = copy.c_r; %[m]
-c_t     = copy.c_t; %[m]
-phi_k   = copy.phi_k; %[deg]
-phi_t   = copy.phi_t; %[deg]
 
-x0 = [b;    
-    sweep;  
-    c_r;    
-    c_t;  
-    phi_k;
-    phi_t;
-    A;
-    A];
+x0 = [copy.b;    
+    copy.sweep;  
+    copy.c_r;    
+    copy.c_t;  
+    copy.phi_k;
+    copy.phi_t;
+    copy.A;
+    copy.A];
 
 % x = ones(length(x0),1);   %beginning values non-dimensional
 
@@ -48,22 +43,18 @@ ub(5) = 25;  %twist kink
 ub(6) = 40;  %twist tip
 ub(7:30) = 1;  %cst coefficients
 
-y = zeros(32, 1, 'double');
+y = zeros(12, 1, 'double');
 y(1) = copy.W_TO;
 y(2) = copy.W_str;
 y(3) = copy.W_fuel;
 y(4) = copy.CLCD;
-y(5:18) = copy.ccldist;
-y(19:32) = copy.cmdist;
-y(33:46) = copy.Yst;
-y(47:60) = copy.chords;
-
-
+y(5:9) = copy.L_poly;
+y(10:14) = copy.M_poly;
 
 %% FMINCON
 options.Display = 'iter-detailed';
 options.Algorithm = 'sqp';
-options.PlotFcns = {@optimplotfval, @optimplotx, @optimplotfirstorderopt, @optimplotconstrviolation, @optimplotfunccount};
+options.PlotFcns = {'optimplotfval',@optimplotfval, @optimplotx, @optimplotfirstorderopt, @optimplotconstrviolation, @optimplotfunccount};
 options.FunValCheck = 'off'; 
 options.DiffMaxChange = 0.5;           %max 50 percent change in design variable
 options.DiffMinChange = 0.05;           %min 5% change in function while gradient searching

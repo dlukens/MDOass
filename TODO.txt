@@ -1,9 +1,10 @@
-- Splines for .load file
 - compute CL for Q3D every iter.
 - chack area calculation
 - everythin nondimensional
 - minimize variables
--does span include fuselage width?
--compute fuel tank volume right
+- does span include fuselage width?
+- compute fuel tank volume right
 - generate airfoil.dat from new A's every iter
 - recalculate MAC for emwet
+- Check NaN thing from Q3D if necessary to set CD =1000
+- get rid of copy global or inits eventually
