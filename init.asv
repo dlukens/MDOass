@@ -29,7 +29,15 @@ inits.A = airfoilgen(order);
 CL = (2 * Ldes(inits.W_TO, inits.W_fuel) * 9.81)/(inits.rho * inits.V^2 * inits.area);
 
 [CLwing, CDwing] = Q3Dvis(CL, inits.A, inits.A, inits.c_r, inits.c_t, inits.b, inits.sweep);
-[inits.L_poly, inits.M_poly] = Q3Dinv(CL, inits.A, inits.A, inits.c_r, inits.c_t, inits.b, inits.sweep);
+[copy.L_poly, copy.M_poly] = Q3Dinv(CL, inits.A_r, inits.A_t, inits.c_r, c_t, b, sweep);
+
+q = 0.5 * inits.rho * inits.V^2;
+points = linspace(0,1,15);
+L_dist = interp1(ResVis.Wing.Yst, ResVis.Wing.ccl*q, points*inits.b/2, 'spline');
+M_dist = interp1(ResVis.Wing.Yst, ResVis.Wing.cm_c4.*ResVis.Wing.chord*inits.MAC*q, points*inits.b/2, 'spline');
+
+inits.L_poly = polyfit(points*inits.b/2, L_dist, 4);
+inits.M_poly = polyfit(points*inits.b/2, M_dist, 4);
 
 inits.CD_AW = CLwing/inits.CLCD - CDwing;
 

@@ -1,4 +1,4 @@
-function Res = Q3Dvis(CL, A_r, A_t, c_r, c_t, b, sweep)
+function [CL, CD] = Q3Dvis(CL, A_r, A_t, c_r, c_t, b, sweep)
 %% Aerodynamic solver setting
 global inits;
 x_t = tand(sweep) * b/2;
@@ -41,8 +41,12 @@ AC.Aero.CL    = CL;          % lift coefficient - comment this line to run the c
 Res = Q3D_solver(AC);
 
 if isnan(Res.CDwing)
+   disp('***NaN CD Warning***')
    Res.CDwing = 100;
 end
+
+CL = Res.CLwing;
+CD = Res.CDwing;
 
 %%
 % figure

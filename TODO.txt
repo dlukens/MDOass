@@ -8,3 +8,5 @@
 - recalculate MAC for emwet
 - Check NaN thing from Q3D if necessary to set CD =1000
 - get rid of copy global or inits eventually
+-think about bounds
+- rescale airfoil for t/c ratio

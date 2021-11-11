@@ -1,18 +1,19 @@
 clc
 clear
 close all
-
 %AIRBUS A300-600R
 
 %% Initialization
-
+fprintf('\t ---- Initialising ----')
+tic;
 init;
-
-disp('initialised')
 
 %% Variables
 global copy;
 copy = inits;
+
+copy.iter = 1;
+
 
 x0 = [copy.b;    
     copy.sweep;  
@@ -21,39 +22,43 @@ x0 = [copy.b;
     copy.phi_k;
     copy.phi_t;
     copy.A;
-    copy.A];
+    copy.A;
+    copy.W_TO;
+    copy.W_str;
+    copy.W_fuel;
+    copy.CLCD;
+    copy.L_poly';
+    copy.M_poly'];
 
-% x = ones(length(x0),1);   %beginning values non-dimensional
+x0 = ones(length(x0),1);
 
-lb = ones(30,1);
-lb(1) = 10;    %span
-lb(2) = 1;  %sweep
-lb(3) = 2;    %root
-lb(4) = 1;    %tip
-lb(5) = -5;  %twist kink
-lb(6) = -5;  %twist tip
-lb(7:30) = -1;  %cst coefficients
+lb = ones(length(x0),1);
+lb(1) = 0.1;    %span
+lb(2) = 0.001;  %sweep
+lb(3) = 0.1;    %root
+lb(4) = 0.1;    %tip
+lb(5) = -2;  %twist kink
+lb(6) = -2;  %twist tip
+lb(7:30) = 0;  %cst coefficients
+lb(31:end) = -1; % Y vector  %Probably wanna tighten this
 
-ub = ones(30,1);
-ub(1) = 50;    %span
-ub(2) = 40;  %sweep
-ub(3) = 10;    %root
-ub(4) = 5;    %tip
-ub(5) = 25;  %twist kink
-ub(6) = 40;  %twist tip
-ub(7:30) = 1;  %cst coefficients
+ub = ones(length(x0),1);
+ub(1) = 2;    %span
+ub(2) = 2;  %sweep
+ub(3) = 2;    %root
+ub(4) = 2;    %tip
+ub(5) = 10;  %twist kink
+ub(6) = 10;  %twist tip
+ub(7:30) = 2;  %cst coefficients
+ub(31:end) = 2; % Y vector %Probably wanna tighten this
 
-y = zeros(12, 1, 'double');
-y(1) = copy.W_TO;
-y(2) = copy.W_str;
-y(3) = copy.W_fuel;
-y(4) = copy.CLCD;
-y(5:9) = copy.L_poly;
-y(10:14) = copy.M_poly;
+toc;
+fprintf('\t ---- FMINCON Start ----')
 
 %% FMINCON
 options.Display = 'iter-detailed';
 options.Algorithm = 'sqp';
+options.OutputFcn = 'funccount'; 
 options.PlotFcns = {'optimplotfval',@optimplotfval, @optimplotx, @optimplotfirstorderopt, @optimplotconstrviolation, @optimplotfunccount};
 options.FunValCheck = 'off'; 
 options.DiffMaxChange = 0.5;           %max 50 percent change in design variable
@@ -61,5 +66,6 @@ options.DiffMinChange = 0.05;           %min 5% change in function while gradien
 options.TolFun = 0.01;       % convergence criteria is when the minimized weight is withing 1 percent of original
 options.TolX = 0.0005;         % end optimization if design variable only changes by 0.05 percent
 options.TolCon = 0.001;       % constraint convergence criteria
+% options = optimoptions(@fmincon,'Display','iter-detailed','Algorithm','sqp', 'FunValCheck', 'off');
 
-[x,FVAL,EXITFLAG,OUTPUT] = fmincon(@(x)opt_IDF(x,y),x0,[],[],[],[],lb,ub,@(x)constraints_IDF(x,y),options);
+[x,FVAL,EXITFLAG,OUTPUT] = fmincon(@(x)opt_IDF(x),x0,[],[],[],[],lb,ub,@(x)constraints_IDF(x),options);

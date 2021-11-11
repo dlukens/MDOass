@@ -17,7 +17,7 @@ AC.Wing.Geom = [0       0       0     c_r         0;
 AC.Wing.inc  = 0;   
             
 % Airfoil coefficients input matrix
-%                    | ->     upper curve coeff.    <-|  | ->   lower curve coeff.    <-| 
+%           | ->     upper curve coeff.    <-|  | ->   lower curve coeff.    <-| 
 AC.Wing.Airfoils   =   [A_r' ;
                         A_t'];
                   
