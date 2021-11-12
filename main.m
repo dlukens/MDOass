@@ -12,7 +12,6 @@ init;
 global copy;
 copy = inits;
 
-
 x0 = [copy.b; 
     copy.c_r;    
     copy.tr_k;
@@ -21,7 +20,6 @@ x0 = [copy.b;
     copy.phi_t;
     copy.A;
     copy.A;
-    copy.W_TO;
     copy.W_str;
     copy.W_fuel;
     copy.CLCD;
@@ -38,7 +36,10 @@ lb(4) = 0.1;    %tip taper ratio
 lb(5) = -2;  %twist kink
 lb(6) = -2;  %twist tip
 lb(7:30) = 0;  %cst coefficients
-lb(31:end) = -1; % Y vector  %Probably wanna tighten this
+lb(31) = 0.1; %W_str
+lb(32) = 0.1; %W_fuel
+lb(33) = 0.1; % CLCD
+lb(34:end) = -2; % L and M polynomials
 
 ub = ones(length(x0),1);
 ub(1) = 2;    %span
@@ -48,7 +49,10 @@ ub(4) = 2;    % tip taper ratio
 ub(5) = 10;  %twist kink
 ub(6) = 10;  %twist tip
 ub(7:30) = 2;  %cst coefficients
-ub(31:end) = 2; % Y vector %Probably wanna tighten this
+ub(31) = 2; %W_str
+ub(32) = 2; %W_fuel
+ub(33) = 2; % CLCD
+ub(34:end) = 2; % L and M polynomials
 
 toc;
 fprintf('\t ---- FMINCON Start ---- \n')

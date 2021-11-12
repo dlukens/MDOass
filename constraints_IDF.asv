@@ -14,11 +14,12 @@ phi_k = x(5)*inits.phi_k;
 phi_t = x(6)*inits.phi_t;
 A_r = x(7:18).*inits.A;
 A_t = x(19:30).*inits.A;
-W_str = x(31)*inits.W_str;
-W_fuel = x(32)*inits.W_fuel;
-CLCD = x(33)*inits.CLCD;
-L_poly = x(34:38).*inits.L_poly';
-M_poly = x(39:43).*inits.M_poly';
+W_TO = x(31)*inits.W_TO;
+W_str = x(32)*inits.W_str;
+W_fuel = x(33)*inits.W_fuel;
+CLCD = x(34)*inits.CLCD;
+L_poly = x(35:39).*inits.L_poly';
+M_poly = x(40:44).*inits.M_poly';
 
 %%
 sweep = atand((c_r - c_r*tr_k)/(b * 0.4 * 0.5));

@@ -10,4 +10,4 @@
 - rescale airfoil for t/c ratio
 - history variables
 -check q3d inputs
--add twist angles to Q3d
+- remove W_TO from X

@@ -6,23 +6,22 @@ global inits;
 
 fprintf('\t ---- F-count: %d/%d ---- \n', copy.iter, length(x));
 
-disp(x)  %for monitoring
-copy.papi = x;
+%for monitoring
+copy.papi = x
 
-b = x(1)*inits.b;
-c_r = x(2)*inits.c_r;
-tr_k = x(3)*inits.tr_k;
-tr_t = x(4)*inits.tr_t;
-phi_k = x(5)*inits.phi_k;
-phi_t = x(6)*inits.phi_t;
-A_r = x(7:18).*inits.A;
-A_t = x(19:30).*inits.A;
-W_TO = x(31)*inits.W_TO;
-W_str = x(32)*inits.W_str;
-W_fuel = x(33)*inits.W_fuel;
-CLCD = x(34)*inits.CLCD;
-L_poly = x(35:39).*inits.L_poly';
-M_poly = x(40:44).*inits.M_poly';
+b = x(1)*inits.b
+c_r = x(2)*inits.c_r
+tr_k = x(3)*inits.tr_k
+tr_t = x(4)*inits.tr_t
+phi_k = x(5)*inits.phi_k
+phi_t = x(6)*inits.phi_t
+A_r = x(7:18).*inits.A
+A_t = x(19:30).*inits.A
+W_str = x(31)*inits.W_str
+W_fuel = x(32)*inits.W_fuel
+CLCD = x(33)*inits.CLCD
+L_poly = x(34:38).*inits.L_poly'
+M_poly = x(39:43).*inits.M_poly'
 
 sweep = atand((c_r - c_r*tr_k)/(b * 0.4 * 0.5));
 x_t = tand(sweep) * b/2;
@@ -41,12 +40,12 @@ area = A1 + A2;
 CL = 0.5; %This must be computed.
 [copy.L_poly, copy.M_poly] = Q3Dinv(CL, A_r, A_t, c_r, tr_k, tr_t, phi_k, phi_t, b);
 
-[copy.W_str, Yu_r, Yl_r, Yu_t, Yl_t] = EMWETmain(W_TO, W_fuel, b, c_r, c_t, area, sweep, A_r, A_t, L_poly, M_poly);
+[copy.W_str, Yu_r, Yl_r, Yu_t, Yl_t] = EMWETmain(W_str, W_fuel, b, c_r, c_t, area, sweep, A_r, A_t, L_poly, M_poly);
 
 [CLwing, CDwing] = Q3Dvis(CL, A_r, A_t, c_r, tr_k, tr_t, phi_k, phi_t, b);
 copy.CLCD = CLwing/CDwing;
  
-[copy.W_fuel, copy.V_fuel] = Breguet(W_TO, CLCD);
+[copy.W_fuel, copy.V_fuel] = Breguet(W_str, W_fuel, CLCD);
 
 f = double(objective(copy.W_fuel, copy.W_str));
 

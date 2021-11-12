@@ -34,9 +34,7 @@ inits.CD_AW = CLwing/inits.CLCD - CDwing;
 
 %% Find W_str
 
-inits.W_str = EMWETmain(inits.W_TO, inits.W_fuel, inits.b, inits.c_r, inits.tr_k, inits.tr_t, ...
-                        inits.area, inits.A, inits.A, inits.L_poly, inits.M_poly);
-
+inits.W_str = 8516; %Found from initial run with emwet
 inits.W_AW = inits.W_TO - inits.W_fuel - inits.W_str;
 
 function A = airfoilgen(order)

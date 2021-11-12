@@ -1,8 +1,11 @@
-function [] = EMWETwrite(W_TO, W_fuel, b, c_r, tr_k, tr_t, area, L_poly, M_poly)
+function [] = EMWETwrite(W_str, W_fuel, b, c_r, tr_k, tr_t, area, L_poly, M_poly)
 %% Routine to write the input file for the EMWET procedure
 
-MTOW        =    W_TO;         %[kg]
-MZF         =    W_TO - W_fuel;         %[kg]
+
+global inits; %bad bad
+
+MTOW        =    W_str + W_fuel + inits.W_AW;         %[kg]
+MZF         =    W_str + inits.W_AW;         %[kg]
 nz_max      =    2.5;   
 span        =    b;         %[m]
 wing_surf   =    area;
