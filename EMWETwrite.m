@@ -1,4 +1,4 @@
-function [] = EMWETwrite(W_TO, W_fuel, b, c_r, c_t, area, sweep, L_poly, M_poly)
+function [] = EMWETwrite(W_TO, W_fuel, b, c_r, tr_k, tr_t, area, L_poly, M_poly)
 %% Routine to write the input file for the EMWET procedure
 
 MTOW        =    W_TO;         %[kg]
@@ -25,11 +25,13 @@ section_num =    3;
 airfoil_num =    2;
 
 
+sweep = atand((c_r - c_r*tr_k)/(b * 0.4 * 0.5));
 x_t = tand(sweep) * b/2;
 x_k = tand(sweep) * b/2*0.4;
 y_k = b/2*0.4;
 y_t = b/2;
-c_k = c_r - x_k;
+c_k = c_r * tr_k;
+c_t = c_r * tr_t;
 
 
 fid = fopen('A300.init','wt');

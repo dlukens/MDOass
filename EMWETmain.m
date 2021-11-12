@@ -1,4 +1,4 @@
-function [W_str, Yu_r, Yl_r, Yu_t, Yl_t] = EMWETmain(W_TO, W_fuel, b, c_r, c_t, area, sweep, A_r, A_t, L_poly, M_poly)
+function [W_str, Yu_r, Yl_r, Yu_t, Yl_t] = EMWETmain(W_TO, W_fuel, b, c_r, tr_k, tr_t, area, A_r, A_t, L_poly, M_poly)
     %% Reconstruct airfoil
     airfoil_x = linspace(0,1,53)';
  
@@ -17,7 +17,7 @@ function [W_str, Yu_r, Yl_r, Yu_t, Yl_t] = EMWETmain(W_TO, W_fuel, b, c_r, c_t, 
 
     %% Write .init and .load file
 
-    EMWETwrite(W_TO, W_fuel, b, c_r, c_t, area, sweep, L_poly, M_poly);
+    EMWETwrite(W_TO, W_fuel, b, c_r, tr_k, tr_t, area, L_poly, M_poly);
 
     %% Run EMWET
 

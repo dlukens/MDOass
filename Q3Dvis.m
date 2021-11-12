@@ -1,11 +1,13 @@
-function [CL, CD] = Q3Dvis(CL, A_r, A_t, c_r, c_t, b, sweep)
+function [CL, CD] = Q3Dvis(CL, A_r, A_t, c_r, tr_k, tr_t, b)
 %% Aerodynamic solver setting
 global inits;
+sweep = atand((c_r - c_r*tr_k)/(b * 0.4 * 0.5));
 x_t = tand(sweep) * b/2;
 x_k = tand(sweep) * b/2*0.4;
 y_k = b/2*0.4;
 y_t = b/2;
-c_k = c_r - x_k - 0.00001;
+c_k = c_r * tr_k - 0.0001;
+c_t = c_r * tr_t;
 
 % Wing planform geometry 
 %                x      y       z   chord(m)    twist angle (deg) 

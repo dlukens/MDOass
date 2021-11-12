@@ -10,8 +10,10 @@ inits.MAC = 6.44; %[m]
 inits.Re = inits.rho * inits.V * inits.MAC / 3.706e-5; %[-]
 inits.b = 44.84;
 inits.c_r = 10; %[m]
-inits.c_t = inits.c_r/3; %[m]
-inits.sweep = 28; %[deg]
+% inits.c_t = inits.c_r/3; %[m]
+% inits.sweep = 28; %[deg]
+inits.tr_k = 0.5;
+inits.tr_t = 0.3;
 inits.CLCD = 16;
 inits.phi_k = 1;
 inits.phi_t = 2;
@@ -25,15 +27,15 @@ inits.A = airfoilgen(order);
 %% Find CD_A-w
 CL = (2 * Ldes(inits.W_TO, inits.W_fuel) * 9.81)/(inits.rho * inits.V^2 * inits.area);
 
-[CLwing, CDwing] = Q3Dvis(CL, inits.A, inits.A, inits.c_r, inits.c_t, inits.b, inits.sweep);
-[inits.L_poly, inits.M_poly] = Q3Dinv(CL, inits.A, inits.A, inits.c_r, inits.c_t, inits.b, inits.sweep);
+[CLwing, CDwing] =              Q3Dvis(CL, inits.A, inits.A, inits.c_r, inits.tr_k, inits.tr_t, inits.b);
+[inits.L_poly, inits.M_poly] =  Q3Dinv(CL, inits.A, inits.A, inits.c_r, inits.tr_k, inits.tr_t, inits.b);
 
 inits.CD_AW = CLwing/inits.CLCD - CDwing;
 
 %% Find W_str
 
-inits.W_str = EMWETmain(inits.W_TO, inits.W_fuel, inits.b, inits.c_r, inits.c_t, ...
-                        inits.area, inits.sweep, inits.A, inits.A, inits.L_poly, inits.M_poly);
+inits.W_str = EMWETmain(inits.W_TO, inits.W_fuel, inits.b, inits.c_r, inits.tr_k, inits.tr_t, ...
+                        inits.area, inits.A, inits.A, inits.L_poly, inits.M_poly);
 
 inits.W_AW = inits.W_TO - inits.W_fuel - inits.W_str;
 

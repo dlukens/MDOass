@@ -4,15 +4,15 @@ tic
 global copy;
 global inits;
 
-fprintf('\t ---- F-count: %d ---- \n', copy.iter);
+fprintf('\t ---- F-count: %d/%d ---- \n', copy.iter, length(x));
 
 disp(x)  %for monitoring
 copy.papi = x;
 
 b = x(1)*inits.b;
-sweep = x(2)*inits.sweep;
-c_r = x(3)*inits.c_r;
-c_t = x(4)*inits.c_t;
+c_r = x(2)*inits.c_r;
+tr_k = x(3)*inits.tr_k;
+tr_t = x(4)*inits.tr_t;
 phi_k = x(5)*inits.phi_k;
 phi_t = x(6)*inits.phi_t;
 A_r = x(7:18).*inits.A;
@@ -24,11 +24,13 @@ CLCD = x(34)*inits.CLCD;
 L_poly = x(35:39).*inits.L_poly';
 M_poly = x(40:44).*inits.M_poly';
 
+sweep = atand((c_r - c_r*tr_k)/(b * 0.4 * 0.5));
 x_t = tand(sweep) * b/2;
 x_k = tand(sweep) * b/2*0.4;
 y_k = b/2*0.4;
 y_t = b/2;
-c_k = c_r - x_k;
+c_k = c_r * tr_k;
+c_t = c_r * tr_t;
 
 A1 = ((c_r + c_k) * 0.4 * b / 2) / 2;
 A2 = (c_k + c_t) * (x_t - x_k) / 2;
@@ -37,12 +39,11 @@ area = A1 + A2;
 %% Blocks
 
 CL = 0.5; %This must be computed.
-[copy.L_poly, copy.M_poly] = Q3Dinv(CL, A_r, A_t, c_r, c_t, b, sweep);
+[copy.L_poly, copy.M_poly] = Q3Dinv(CL, A_r, A_t, c_r, tr_k, tr_t, b);
 
-%temporary to monitor airfoils
 [copy.W_str, Yu_r, Yl_r, Yu_t, Yl_t] = EMWETmain(W_TO, W_fuel, b, c_r, c_t, area, sweep, A_r, A_t, L_poly, M_poly);
 
-[CLwing, CDwing] = Q3Dvis(CL, A_r, A_t, c_r, c_t, b, sweep);
+[CLwing, CDwing] = Q3Dvis(CL, A_r, A_t, c_r, tr_k, tr_t, b);
 copy.CLCD = CLwing/CDwing;
  
 [copy.W_fuel, copy.V_fuel] = Breguet(W_TO, CLCD);
@@ -53,7 +54,7 @@ copy.iter = copy.iter + 1;
 
 %% Plots
 
-if mod(copy.iter,1) == 5
+if mod(copy.iter,1) == 0
     figure
         subplot(3,1,1)
             title('Planform')
