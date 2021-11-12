@@ -1,4 +1,4 @@
-function [CL, CD] = Q3Dvis(CL, A_r, A_t, c_r, tr_k, tr_t, b)
+function [CL, CD] = Q3Dvis(CL, A_r, A_t, c_r, tr_k, tr_t, phi_k, phi_t, b)
 %% Aerodynamic solver setting
 global inits;
 sweep = atand((c_r - c_r*tr_k)/(b * 0.4 * 0.5));
@@ -12,8 +12,8 @@ c_t = c_r * tr_t;
 % Wing planform geometry 
 %                x      y       z   chord(m)    twist angle (deg) 
 AC.Wing.Geom = [0       0       0     c_r         0;
-               x_k      y_k     0     c_k         0;
-               x_t      y_t     0     c_t         0];
+               x_k      y_k     0     c_k         phi_k;
+               x_t      y_t     0     c_t         phi_t];
 
 % Wing incidence angle (degree)
 AC.Wing.inc  = 0;   

@@ -67,7 +67,7 @@ if mod(copy.iter,1) == 0
             plot([y_t,  y_t], [x_t,  x_t + c_t]);
             plot([y_t,  y_k], [x_t + c_t,  c_r]);
             plot([y_k,  0],   [c_r,        c_r]);
-            axis([0,45,-2,20])
+            axis([0,30,-2,20])
         subplot(2,2,2)
             title('Root airfoil')
             hold on

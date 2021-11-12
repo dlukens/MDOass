@@ -27,8 +27,8 @@ inits.A = airfoilgen(order);
 %% Find CD_A-w
 CL = (2 * Ldes(inits.W_TO, inits.W_fuel) * 9.81)/(inits.rho * inits.V^2 * inits.area);
 
-[CLwing, CDwing] =              Q3Dvis(CL, inits.A, inits.A, inits.c_r, inits.tr_k, inits.tr_t, inits.b);
-[inits.L_poly, inits.M_poly] =  Q3Dinv(CL, inits.A, inits.A, inits.c_r, inits.tr_k, inits.tr_t, inits.b);
+[CLwing, CDwing] =              Q3Dvis(CL, inits.A, inits.A, inits.c_r, inits.tr_k, inits.tr_t, inits.phi_k, inits.phi_t, inits.b);
+[inits.L_poly, inits.M_poly] =  Q3Dinv(CL, inits.A, inits.A, inits.c_r, inits.tr_k, inits.tr_t, inits.phi_k, inits.phi_t, inits.b);
 
 inits.CD_AW = CLwing/inits.CLCD - CDwing;
 
