@@ -1,5 +1,7 @@
 function [CL, CD] = Q3Dvis(CL, A_r, A_t, c_r, tr_k, tr_t, phi_k, phi_t, b)
 %% Aerodynamic solver setting
+
+
 global inits;
 sweep = atand((c_r - c_r*tr_k)/(b * 0.4 * 0.5));
 x_t = tand(sweep) * b/2;
@@ -27,7 +29,7 @@ AC.Wing.eta = [0;0.4;1];  % Spanwise location of the airfoil sections
 
 % Viscous vs inviscid
 AC.Visc  = 1;              % 0 for inviscid and 1 for viscous analysis
-AC.Aero.MaxIterIndex = 200;    %Maximum number of Iteration for the
+AC.Aero.MaxIterIndex = 150;    %Maximum number of Iteration for the
                                 %convergence of viscous calculation          
 % Flight Condition
 AC.Aero.V     = inits.V;       % flight speed (m/s)
@@ -44,24 +46,23 @@ Res = Q3D_solver(AC);
 
 if isnan(Res.CDwing)
    disp('***NaN CD Warning***')
-   Res.CDwing = 100;
+   Res.CDwing = 10;
 end
 
 CL = Res.CLwing;
 CD = Res.CDwing;
 
 %%
-% figure
-%     hold on
-%     axis ij
-%     axis equal
-%     %  [y1, y2], [x1,x2]
-%     plot([0,    y_k], [0,          x_k]);
-%     plot([y_k,  y_t], [x_k,        x_t]);
-%     plot([y_t,  y_t], [x_t,  x_t + c_t]);
-%     plot([y_t,  y_k], [x_t + c_t,  c_r]);
-%     plot([y_k,  0],   [c_r,        c_r]);
-        
+figure
+    hold on
+    axis ij
+    axis equal
+    %  [y1, y2], [x1,x2]
+    plot([0,    y_k], [0,          x_k]);
+    plot([y_k,  y_t], [x_k,        x_t]);
+    plot([y_t,  y_t], [x_t,  x_t + c_t]);
+    plot([y_t,  y_k], [x_t + c_t,  c_r]);
+    plot([y_k,  0],   [c_r,        c_r]);
 
 end
 

@@ -1,23 +1,23 @@
 global inits;
 inits.W_TO = 170500; %[kg]
 inits.W_fuel = 56330; %[kg]
-inits.rho = 0.389; % [kg/m^3] double check this
-inits.V = 234.587; %[m/s]
+inits.rho = 0.38; % [kg/m^3] double check this
+inits.V = 230; %[m/s]
+inits.V_max = 234.587;
 inits.area = 260/2; %[m^2]
 inits.h = 10668; %[m]
 inits.M = inits.V/297.4;
 inits.MAC = 6.44; %[m]
-inits.Re = inits.rho * inits.V * inits.MAC / 3.706e-5; %[-]
+inits.Re = inits.rho * inits.V * inits.MAC / 1.437e-5; %[-]
 inits.b = 44.84;
 inits.c_r = 10; %[m]
-% inits.c_t = inits.c_r/3; %[m]
-% inits.sweep = 28; %[deg]
 inits.tr_k = 0.5;
 inits.tr_t = 0.3;
 inits.CLCD = 16;
 inits.phi_k = 1;
 inits.phi_t = 2;
 inits.range = 7408000;
+inits.n_max = 2.5;
 
 
 %% Inititalise airfoil - naca
@@ -25,16 +25,20 @@ order = 5;
 inits.A = airfoilgen(order);
 
 %% Find CD_A-w
-CL = (2 * Ldes(inits.W_TO, inits.W_fuel) * 9.81)/(inits.rho * inits.V^2 * inits.area);
 
-[CLwing, CDwing] =              Q3Dvis(CL, inits.A, inits.A, inits.c_r, inits.tr_k, inits.tr_t, inits.phi_k, inits.phi_t, inits.b);
-[inits.L_poly, inits.M_poly] =  Q3Dinv(CL, inits.A, inits.A, inits.c_r, inits.tr_k, inits.tr_t, inits.phi_k, inits.phi_t, inits.b);
+CLinv = inits.W_TO * inits.n_max / (0.5 * inits.rho * inits.V^2 * inits.area);
+CLvis = Ldes(inits.W_TO, inits.W_fuel) * inits.n_max / (0.5 * inits.rho * inits.V^2 * inits.area);
 
-inits.CD_AW = CLwing/inits.CLCD - CDwing;
+[inits.CLwing, inits.CDwing] =  Q3Dvis(CLvis, inits.A, inits.A, inits.c_r, inits.tr_k, inits.tr_t, inits.phi_k, inits.phi_t, inits.b);
+[inits.L_poly, inits.M_poly] =  Q3Dinv(CLinv, inits.A, inits.A, inits.c_r, inits.tr_k, inits.tr_t, inits.phi_k, inits.phi_t, inits.b);
+
+inits.CD_AW = inits.CLwing/inits.CLCD - inits.CDwing;
 
 %% Find W_str
 
-inits.W_str = 8516; %Found from initial run with emwet
+inits.W_str = EMWETmain(inits.W_TO, inits.W_fuel, inits.b, inits.c_r, inits.tr_k, inits.tr_t, ...
+                        inits.area, inits.A, inits.A, inits.L_poly, inits.M_poly);
+
 inits.W_AW = inits.W_TO - inits.W_fuel - inits.W_str;
 
 function A = airfoilgen(order)

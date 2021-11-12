@@ -1,11 +1,8 @@
-function [] = EMWETwrite(W_str, W_fuel, b, c_r, tr_k, tr_t, area, L_poly, M_poly)
+function [] = EMWETwrite(W_TO, W_fuel, b, c_r, tr_k, tr_t, area, L_poly, M_poly)
 %% Routine to write the input file for the EMWET procedure
 
-
-global inits; %bad bad
-
-MTOW        =    W_str + W_fuel + inits.W_AW;         %[kg]
-MZF         =    W_str + inits.W_AW;         %[kg]
+MTOW        =    W_TO;       %[kg]
+MZF         =    W_TO - W_fuel;         %[kg]
 nz_max      =    2.5;   
 span        =    b;         %[m]
 wing_surf   =    area;
@@ -69,10 +66,8 @@ points = linspace(0,1,15);
 L_dist = polyval(L_poly, points*b/2);
 M_dist = polyval(M_poly, points*b/2);
 
-
-B = [points; L_dist; M_dist];
 fid = fopen('A300.load','wt');
-fprintf(fid, '%g %g %g \n',B);
+fprintf(fid, '%g %g %g \n', [points; L_dist; M_dist]);
 fclose(fid);
 
 end

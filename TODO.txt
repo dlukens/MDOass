@@ -1,13 +1,10 @@
-- compute CL for Q3D every iter.
 - chack area calculation
 - minimize variables
-- does span include fuselage width?
 - compute fuel tank volume right
 - recalculate MACs
-- Check NaN thing from Q3D and if necessary to set CD =1000
-- get rid of copy global or inits eventually
+- get rid of inits eventually
 -think about bounds
 - rescale airfoil for t/c ratio
 - history variables
 -check q3d inputs
-- remove W_TO from X
+-check init values again

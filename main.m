@@ -13,7 +13,7 @@ global copy;
 copy = inits;
 
 x0 = [copy.b; 
-    copy.c_r;    
+    copy.c_r;
     copy.tr_k;
     copy.tr_t;
     copy.phi_k;
