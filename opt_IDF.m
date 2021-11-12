@@ -4,10 +4,7 @@ tic
 global copy;
 global inits;
 
-fprintf('\t ---- F-count: %d/%d ---- \n', copy.iter, length(x));
-
-%for monitoring
-copy.papi = x;
+fprintf('\t ---- F-count: %d/%d ---- \n', copy.iter, length(x)+1);
 
 b = x(1)*inits.b;
 c_r = x(2)*inits.c_r;
@@ -23,6 +20,8 @@ CLCD = x(33)*inits.CLCD;
 L_poly = x(34:38).*inits.L_poly';
 M_poly = x(39:43).*inits.M_poly';
 
+copy.papi = [b; c_r; tr_k; tr_t; phi_k; phi_t; A_r; A_t; W_str; W_fuel; CLCD; L_poly; M_poly]
+
 W_TO = double(W_str + W_fuel + inits.W_AW);
 
 sweep = atand((c_r - c_r*tr_k)/(b * 0.4 * 0.5));
@@ -32,22 +31,26 @@ y_k = b/2*0.4;
 y_t = b/2;
 c_k = c_r * tr_k;
 c_t = c_r * tr_t;
+tr_kt = tr_t / tr_k;
 
-A1 = ((c_r + c_k) * 0.4 * b / 2) / 2;
-A2 = (c_k + c_t) * (x_t - x_k) / 2;
-area = A1 + A2;
+area1 = ((c_r + c_k) * 0.4 * b / 2) / 2;
+area2 = (c_k + c_t) * (x_t - x_k) / 2;
+area = area1 + area2; %for one wing
 
-CLinv = W_TO * inits.n_max / (0.5 * inits.rho * inits.V_max^2 * area);
-CLvis = Ldes(W_TO, W_fuel) * inits.n_max / (0.5 * inits.rho * inits.V^2 * area);
+MAC1 = 2/3 * c_r * (1 + tr_k + tr_k^2)/(1 + tr_k);
+MAC2 = 2/3 * c_k * (1 + tr_kt + tr_kt^2)/(1 + tr_kt);
+MAC = (MAC1*area1 + MAC2*area2)/area;
+
+CLinv = W_TO * inits.n_max / (0.5 * inits.rho * inits.V_max^2 * area * 2);
+CLvis = Ldes(W_TO, W_fuel) * inits.n_max / (0.5 * inits.rho * inits.V^2 * area * 2);
 
 %% Blocks
 
-[copy.L_poly, copy.M_poly] = Q3Dinv(CLinv, A_r, A_t, c_r, tr_k, tr_t, phi_k, phi_t, b);
+[copy.L_poly, copy.M_poly] = Q3Dinv(CLinv, A_r, A_t, c_r, tr_k, tr_t, phi_k, phi_t, b, MAC);
 
-%check these
 [copy.W_str, Yu_r, Yl_r, Yu_t, Yl_t] = EMWETmain(W_TO, W_fuel, b, c_r, tr_k, tr_t, area, A_r, A_t, L_poly, M_poly);
 
-[CLwing, CDwing] = Q3Dvis(CLvis, A_r, A_t, c_r, tr_k, tr_t, phi_k, phi_t, b);
+[CLwing, CDwing] = Q3Dvis(CLvis, A_r, A_t, c_r, tr_k, tr_t, phi_k, phi_t, b, MAC);
 copy.CLCD = CLwing/CDwing;
  
 [copy.W_fuel, copy.V_fuel] = Breguet(W_TO, CLCD);
@@ -59,7 +62,7 @@ fprintf('\t f = %d \n', f);
 copy.iter = copy.iter + 1;
 
 %% Plots
-if mod(copy.iter,5) == 0
+if mod(copy.iter,2) == 0
     figure
         subplot(2,2,[1 3])
             title('Planform')
@@ -72,7 +75,7 @@ if mod(copy.iter,5) == 0
             plot([y_t,  y_t], [x_t,  x_t + c_t]);
             plot([y_t,  y_k], [x_t + c_t,  c_r]);
             plot([y_k,  0],   [c_r,        c_r]);
-            axis([0,45,-2,20])
+            axis([0,45,0,30])
         subplot(2,2,2)
             title('Root airfoil')
             hold on

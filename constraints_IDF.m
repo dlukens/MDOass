@@ -10,10 +10,10 @@ b = x(1)*inits.b;
 c_r = x(2)*inits.c_r;
 tr_k = x(3)*inits.tr_k;
 tr_t = x(4)*inits.tr_t;
-phi_k = x(5)*inits.phi_k;
-phi_t = x(6)*inits.phi_t;
-A_r = x(7:18).*inits.A;
-A_t = x(19:30).*inits.A;
+% phi_k = x(5)*inits.phi_k;
+% phi_t = x(6)*inits.phi_t;
+% A_r = x(7:18).*inits.A;
+% A_t = x(19:30).*inits.A;
 W_str = x(31)*inits.W_str;
 W_fuel = x(32)*inits.W_fuel;
 CLCD = x(33)*inits.CLCD;
@@ -27,9 +27,9 @@ x_k = tand(sweep) * b/2*0.4;
 c_k = c_r * tr_k;
 c_t = c_r * tr_t;
 
-A1 = ((c_r + c_k) * 0.4 * b / 2) / 2;
-A2 = (c_k + c_t) * (x_t - x_k) / 2;
-area = A1 + A2;
+area1 = ((c_r + c_k) * 0.4 * b / 2) / 2;
+area2 = (c_k + c_t) * (x_t - x_k) / 2;
+area = area1 + area2;
 
 V_fuel = W_fuel/rho_fuel;
 V_tank = area * 0.2; %needs to be changed
@@ -38,7 +38,7 @@ W_TO = W_str + W_fuel + inits.W_AW;
 
 %%
 c(1) = V_fuel/(V_tank * f_tank) - 1;
-c(2) = (W_TO / area)/(inits.W_TO/inits.area) - 1;
+c(2) = (W_TO / 2 * area)/(inits.W_TO/inits.area) - 1;
 
 ceq(1) = W_TO/copy.W_TO - 1;
 ceq(2) = W_str/copy.W_str - 1;

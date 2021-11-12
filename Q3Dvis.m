@@ -1,4 +1,4 @@
-function [CL, CD] = Q3Dvis(CL, A_r, A_t, c_r, tr_k, tr_t, phi_k, phi_t, b)
+function [CL, CD] = Q3Dvis(CL, A_r, A_t, c_r, tr_k, tr_t, phi_k, phi_t, b, MAC)
 %% Aerodynamic solver setting
 global inits;
 sweep = atand((c_r - c_r*tr_k)/(b * 0.4 * 0.5));
@@ -10,18 +10,8 @@ z_k = tand(inits.dihedral) * b * 0.4 * 0.5;
 z_t = tand(inits.dihedral) * b * 0.5;
 c_k = c_r * tr_k - 0.0001;
 c_t = c_r * tr_t;
-tr_kt = tr_t / tr_k;
 
-MAC1 = 2/3 * c_r * (1 + tr_k + tr_k^2)/(1 + tr_k);
-MAC2 = 2/3 * c_k * (1 + tr_kt + tr_kt^2)/(1 + tr_kt);
-
-area1 = ((c_r + c_k) * 0.4 * b / 2) / 2;
-area2 = (c_k + c_t) * (x_t - x_k) / 2;
-area = area1 + area2;
-
-MAC = (MAC1*area1 + MAC2*area2)/area;
 Re = inits.rho * inits.V * MAC / 1.437e-5; %[-]
-
 
 % Wing planform geometry 
 %                x      y       z   chord(m)    twist angle (deg) 

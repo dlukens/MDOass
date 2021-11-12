@@ -4,7 +4,7 @@ inits.W_fuel = 56330; %[kg]
 inits.rho = 0.38; % [kg/m^3] double check this
 inits.V = 230; %[m/s]
 inits.V_max = 234.587;
-inits.area = 260/2; %[m^2]
+inits.area = 260; %[m^2]
 inits.h = 10668; %[m]
 inits.M = inits.V/297.4;
 inits.MAC = 6.44; %[m]
@@ -27,11 +27,11 @@ inits.A = airfoilgen(order);
 
 %% Find CD_A-w
 
-CLinv = inits.W_TO * inits.n_max / (0.5 * inits.rho * inits.V^2 * inits.area);
-CLvis = Ldes(inits.W_TO, inits.W_fuel) * inits.n_max / (0.5 * inits.rho * inits.V^2 * inits.area);
+CLinv = inits.W_TO * inits.n_max / (0.5 * inits.rho * inits.V^2 * inits.area * 0.5)
+CLvis = Ldes(inits.W_TO, inits.W_fuel) * inits.n_max / (0.5 * inits.rho * inits.V^2 * inits.area * 0.5)
 
-[inits.CLwing, inits.CDwing] =  Q3Dvis(CLvis, inits.A, inits.A, inits.c_r, inits.tr_k, inits.tr_t, inits.phi_k, inits.phi_t, inits.b);
-[inits.L_poly, inits.M_poly] =  Q3Dinv(CLinv, inits.A, inits.A, inits.c_r, inits.tr_k, inits.tr_t, inits.phi_k, inits.phi_t, inits.b);
+[inits.CLwing, inits.CDwing] =  Q3Dvis(CLvis, inits.A, inits.A, inits.c_r, inits.tr_k, inits.tr_t, inits.phi_k, inits.phi_t, inits.b, inits.MAC);
+[inits.L_poly, inits.M_poly] =  Q3Dinv(CLinv, inits.A, inits.A, inits.c_r, inits.tr_k, inits.tr_t, inits.phi_k, inits.phi_t, inits.b, inits.MAC);
 
 inits.CD_AW = inits.CLwing/inits.CLCD - inits.CDwing;
 

@@ -13,14 +13,13 @@ global copy;
 copy = inits;
 
 x0 = [copy.b; 
-    copy.c_r;    
+    copy.c_r;
     copy.tr_k;
     copy.tr_t;
     copy.phi_k;
     copy.phi_t;
     copy.A;
     copy.A;
-    copy.W_TO;
     copy.W_str;
     copy.W_fuel;
     copy.CLCD;
@@ -30,32 +29,32 @@ x0 = [copy.b;
 x0 = ones(length(x0),1);
 
 lb = ones(length(x0),1);
-lb(1) = 0.1;    %span
-lb(2) = 0.1;  %root
-lb(3) = 0.1;    %kink taper ratio
-lb(4) = 0.1;    %tip taper ratio
-lb(5) = -2;  %twist kink
-lb(6) = -2;  %twist tip
-lb(7:30) = 0;  %cst coefficients
-lb(31) = 0.1; % W_TO
-lb(32) = 0.1; %W_str
-lb(33) = 0.1; %W_fuel
-lb(34) = 0.1; % CLCD
-lb(35:end) = -2; % L and M polynomials
+lb(1) = 0.8;    %span
+lb(2) = 0.8;  %root
+lb(3) = 0.5;    %kink taper ratio
+lb(4) = 0.5;    %tip taper ratio
+lb(5) = -1;  %twist kink
+lb(6) = -1;  %twist tip
+lb(7:30) = 0.8;  %cst coefficients
+lb(31) = 0.1; %W_str
+lb(32) = 0.1; %W_fuel
+lb(33) = 0.1; % CLCD
+lb(34:end) = -1.5; % L and M polynomials
 
 ub = ones(length(x0),1);
 ub(1) = 2;    %span
-ub(2) = 2;  %root
-ub(3) = 2;    % kink taper ratio
-ub(4) = 2;    % tip taper ratio
-ub(5) = 10;  %twist kink
-ub(6) = 10;  %twist tip
-ub(7:30) = 2;  %cst coefficients
-ub(31) = 2; % W_TO
-ub(32) = 2; %W_str
-ub(33) = 2; %W_fuel
-ub(34) = 2; % CLCD
-ub(35:end) = 2; % L and M polynomials
+ub(2) = 1.2;  %root
+ub(3) = 1.5;    % kink taper ratio
+ub(4) = 1.5;    % tip taper ratio
+ub(5) = 5;  %twist kink
+ub(6) = 5;  %twist tip
+ub(7:30) = 1.2;  %cst coefficients
+ub(31) = 1.2; %W_str
+ub(32) = 1.2; %W_fuel
+ub(33) = 1.2; % CLCD
+ub(34:end) = 1.5; % L and M polynomials
+
+x0 = [1.22816962642642;1.67547640004196;0.853909685039984;1.02928097976837;0.801053940138397;1.31237859452364;0.800000000000000;1.20000000000000;1.20000000000000;1.07683626703408;0.800000000000000;0.800000000000000;0.972241350992730;0.800000000000000;1.09135846378338;1.20000000000000;0.865743959866656;0.800000000000000;0.977954958319446;1.20000000000000;1.20000000000000;0.800000000000000;0.800000000000000;1.20000000000000;0.800000000000000;1.13776688975810;1.00685369691392;1.10856969840946;1.02183090791009;0.800000000000000;1.78398423672344;0.952206606268240;1.19219918716359;0.708719573561157;0.864821076565108;1.00291918293210;1.44060135466533;0.811786000069750;0.583857408017674;0.881200935080522;1.32104128378710;1.33579691112881;1.75440193139943];
 
 toc;
 fprintf('\t ---- FMINCON Start ---- \n')

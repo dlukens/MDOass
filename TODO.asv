@@ -1,6 +1,7 @@
 - minimize variables
 - compute fuel tank volume right
 - get rid of inits eventually
+- think about bounds
 - rescale airfoil for t/c ratio
 - history variables
-- is area/2?
+- check init values again
