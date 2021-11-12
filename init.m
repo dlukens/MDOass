@@ -18,6 +18,7 @@ inits.phi_k = 1;
 inits.phi_t = 2;
 inits.range = 7408000;
 inits.n_max = 2.5;
+inits.dihedral = 5; %deg
 
 
 %% Inititalise airfoil - naca

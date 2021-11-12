@@ -1,21 +1,33 @@
 function [L_poly, M_poly] = Q3Dinv(CL, A_r, A_t, c_r, tr_k, tr_t, phi_k, phi_t, b)
 %% Aerodynamic solver setting
 global inits;
-
-
 sweep = atand((c_r - c_r*tr_k)/(b * 0.4 * 0.5));
 x_t = tand(sweep) * b/2;
 x_k = tand(sweep) * b/2*0.4;
 y_k = b/2*0.4;
 y_t = b/2;
+z_k = tand(inits.dihedral) * b * 0.4 * 0.5;
+z_t = tand(inits.dihedral) * b * 0.5;
 c_k = c_r * tr_k;
 c_t = c_r * tr_t;
+tr_kt = tr_t / tr_k;
+
+q = 0.5 * inits.rho * inits.V_max^2;
+MAC1 = 2/3 * c_r * (1 + tr_k + tr_k^2)/(1 + tr_k);
+MAC2 = 2/3 * c_k * (1 + tr_kt + tr_kt^2)/(1 + tr_kt);
+
+area1 = ((c_r + c_k) * 0.4 * b / 2) / 2;
+area2 = (c_k + c_t) * (x_t - x_k) / 2;
+area = area1 + area2;
+
+MAC = (MAC1*area1 + MAC2*area2)/area;
+Re = inits.rho * inits.V_max * MAC / 1.437e-5; %[-]
 
 % Wing planform geometry 
 %                x      y       z   chord(m)    twist angle (deg) 
 AC.Wing.Geom = [0       0       0     c_r         0;
-               x_k      y_k     0     c_k         phi_k;
-               x_t      y_t     0     c_t         phi_t];
+               x_k      y_k     z_k   c_k         phi_k;
+               x_t      y_t     z_t   c_t         phi_t];
 
 % Wing incidence angle (degree)
 AC.Wing.inc  = 0;   
@@ -32,10 +44,10 @@ AC.Visc  = 0;              % 0 for inviscid and 1 for viscous analysis
 AC.Aero.MaxIterIndex = 150;    %Maximum number of Iteration for the
                                 %convergence of viscous calculation          
 % Flight Condition
-AC.Aero.V     = inits.V;       % flight speed (m/s)
+AC.Aero.V     = inits.V_max;       % flight speed (m/s)
 AC.Aero.rho   = inits.rho;         % air density  (kg/m3)
 AC.Aero.alt   = inits.h;             % flight altitude (m)
-AC.Aero.Re    = inits.Re;        % reynolds number (based on mean aerodynamic chord) THIS CHANGES WITH MAC!!!
+AC.Aero.Re    = Re;        % reynolds number (based on mean aerodynamic chord) THIS CHANGES WITH MAC!!!
 AC.Aero.M     = inits.M;           % flight Mach number 
 AC.Aero.CL    = CL;          % lift coefficient - comment this line to run the code for given alpha%
 % AC.Aero.Alpha = 2;             % angle of attack -  comment this line to run the code for given cl 
@@ -44,8 +56,7 @@ AC.Aero.CL    = CL;          % lift coefficient - comment this line to run the c
 %% 
 Res = Q3D_solver(AC);
 
-q = 0.5 * inits.rho * inits.V^2;
-MAC = (c_r + c_t) / 2; %TEMPORARY
+
 
 points = linspace(0,1,15);
 L_dist = interp1(Res.Wing.Yst, Res.Wing.ccl*q, points*b/2, 'spline');

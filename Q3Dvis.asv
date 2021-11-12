@@ -12,6 +12,7 @@ c_k = c_r * tr_k - 0.0001;
 c_t = c_r * tr_t;
 tr_kt = tr_t / tr_k;
 
+q = 0.5 * inits.rho * inits.V_max^2;
 MAC1 = 2/3 * c_r * (1 + tr_k + tr_k^2)/(1 + tr_k);
 MAC2 = 2/3 * c_k * (1 + tr_kt + tr_kt^2)/(1 + tr_kt);
 
