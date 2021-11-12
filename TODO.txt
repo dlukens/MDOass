@@ -4,3 +4,4 @@
 - rescale airfoil for t/c ratio
 - history variables
 - is area/2?
+- profiling

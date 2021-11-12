@@ -66,6 +66,8 @@ points = linspace(0,1,15);
 L_dist = polyval(L_poly, points*b/2);
 M_dist = polyval(M_poly, points*b/2);
 
+plot(points, L_dist);
+
 fid = fopen('A300.load','wt');
 fprintf(fid, '%g %g %g \n', [points; L_dist; M_dist]);
 fclose(fid);

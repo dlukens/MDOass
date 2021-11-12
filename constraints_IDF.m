@@ -17,8 +17,8 @@ tr_t = x(4)*inits.tr_t;
 W_str = x(31)*inits.W_str;
 W_fuel = x(32)*inits.W_fuel;
 CLCD = x(33)*inits.CLCD;
-L_poly = x(34:38).*inits.L_poly';
-M_poly = x(39:43).*inits.M_poly';
+L_poly = x(34:37).*inits.L_poly';
+M_poly = x(38:end).*inits.M_poly';
 
 %%
 sweep = atand((c_r - c_r*tr_k)/(b * 0.4 * 0.5));
@@ -44,7 +44,7 @@ ceq(1) = W_TO/copy.W_TO - 1;
 ceq(2) = W_str/copy.W_str - 1;
 ceq(3) = W_fuel/copy.W_fuel - 1;
 ceq(4) = CLCD/copy.CLCD - 1;
-ceq(5:9) = L_poly./copy.L_poly' - 1;
-ceq(10:14) = M_poly./copy.M_poly' - 1;
+ceq(5:8) = L_poly./copy.L_poly' - 1;
+ceq(9:12) = M_poly./copy.M_poly' - 1;
 
 end

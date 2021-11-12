@@ -55,13 +55,12 @@ ub(33) = 1.2; % CLCD
 ub(34:end) = 1.5; % L and M polynomials
 
 toc;
-fprintf('\t ---- FMINCON Start ---- \n')
 
 %% FMINCON
 options.Display = 'iter-detailed';
 options.Algorithm = 'sqp';
 % options.OutputFcn = 'funccount';  that doesnt work
-options.PlotFcns = {'optimplotfval',@optimplotfval, @optimplotx, @optimplotfirstorderopt, @optimplotconstrviolation, @optimplotfunccount};
+options.PlotFcns = {'optimplotfval',@optimplotfval, @optimplotx, @optimplotfunccount};
 options.FunValCheck = 'off'; 
 options.DiffMaxChange = 0.5;           %max 50 percent change in design variable
 options.DiffMinChange = 0.01;           %min 1% change in function while gradient searching

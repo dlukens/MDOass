@@ -52,8 +52,8 @@ points = linspace(0,1,15);
 L_dist = interp1(Res.Wing.Yst, Res.Wing.ccl*q, points*b/2, 'spline');
 M_dist = interp1(Res.Wing.Yst, Res.Wing.cm_c4.*Res.Wing.chord*MAC*q, points*b/2, 'spline');
 
-L_poly = polyfit(points*b/2, L_dist, 4);
-M_poly = polyfit(points*b/2, M_dist, 4);
+L_poly = polyfit(points*b/2, L_dist, 3);
+M_poly = polyfit(points*b/2, M_dist, 3);
 
 %%
 % figure

@@ -4,7 +4,9 @@ tic
 global copy;
 global inits;
 
-fprintf('\t ---- F-count: %d/%d ---- \n', copy.iter, length(x)+1);
+fprintf('\t ---- F-count: %d/%d ---- \n\n', copy.iter, length(x)+1);
+
+copy.papi = x;
 
 b = x(1)*inits.b;
 c_r = x(2)*inits.c_r;
@@ -17,10 +19,9 @@ A_t = x(19:30).*inits.A;
 W_str = x(31)*inits.W_str;
 W_fuel = x(32)*inits.W_fuel;
 CLCD = x(33)*inits.CLCD;
-L_poly = x(34:38).*inits.L_poly';
-M_poly = x(39:43).*inits.M_poly';
+L_poly = x(34:37).*inits.L_poly';
+M_poly = x(38:end).*inits.M_poly';
 
-copy.papi = [b; c_r; tr_k; tr_t; phi_k; phi_t; A_r; A_t; W_str; W_fuel; CLCD; L_poly; M_poly]
 
 W_TO = double(W_str + W_fuel + inits.W_AW);
 
@@ -57,12 +58,12 @@ copy.CLCD = CLwing/CDwing;
 
 f = double(objective(copy.W_fuel, copy.W_str));
 
-fprintf('\t f = %d \n', f);
+fprintf('\t f = %d \n\n', f);
 
 copy.iter = copy.iter + 1;
 
 %% Plots
-if mod(copy.iter,2) == 0
+if mod(copy.iter,4) == 0
     figure
         subplot(2,2,[1 3])
             title('Planform')
