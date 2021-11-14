@@ -8,7 +8,7 @@ y_k = b/2*0.4;
 y_t = b/2;
 z_k = tand(inits.dihedral) * b * 0.4 * 0.5;
 z_t = tand(inits.dihedral) * b * 0.5;
-c_k = c_r * tr_k - 0.0001;
+c_k = c_r * tr_k - 0.00001;
 c_t = c_r * tr_t;
 
 Re = inits.rho * inits.V * MAC / 1.437e-5; %[-]

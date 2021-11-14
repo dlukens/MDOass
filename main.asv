@@ -4,6 +4,7 @@ close all
 %AIRBUS A300-600R
 
 %% Initialization
+fprintf('\t ---- Initialising ---- \n')
 tic;
 init;
 
@@ -54,7 +55,7 @@ ub(33) = 1.5; % CLCD
 ub(34:end) = 2; % L and M polynomials
 
 t = toc;
-fprintf('Initialised in %gs \n\n', t);
+fprintf('Initialised in %g s \n', copy.iter, f, t);
 
 %% FMINCON
 % options.Display = 'iter-detailed';

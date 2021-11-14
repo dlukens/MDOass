@@ -1,10 +1,10 @@
 function f = opt_IDF(x)
-tic;
+tic
 
 global copy;
 global inits;
 
-% fprintf('\t ---- F-count: %d/%d ---- \n\n', copy.iter, length(x)+1);
+fprintf('\t ---- F-count: %d/%d ---- \n\n', copy.iter, length(x)+1);
 
 copy.papi = x;
 
@@ -58,7 +58,8 @@ copy.CLCD = CLwing/CDwing;
 f = double(objective(copy.W_fuel, copy.W_str));
 
 t = toc;
-fprintf('f-eval %g -> \t f = %g in %gs \n', copy.iter, f, t);
+
+fprintf('\t f = %d in %d \n\n', f, t);
 
 copy.iter = copy.iter + 1;
 

@@ -40,7 +40,7 @@ ftank_limit = 0.85; %spanwise
 
 points = linspace(0,1,11)'; %don't change this
 
-%root %thisishiasfasdas
+%root
 [Xtur, Xtlr] = D_airfoil2(A_r(1:end/2),A_r(end/2+1:end),points);
 Thr = (Xtur(:, 2) - Xtlr(:, 2)) * c_r;
 BrL = Thr(ftank_start*10+1);
@@ -56,7 +56,7 @@ Bt = (BtL + BtT) * (ftank_end - ftank_start) * c_t / 2; % area of tank at tip
 
 Be = interp1([0, 1], [Br, Bt], ftank_limit); % area of end tank
 
-V_tank = 1/3 * ftank_limit * b/2 * (Br + Be + sqrt(Br + Be)) * 2 %for both wings
+V_tank = 1/3 * ftank_limit * b/2 * (Br + Be + sqrt(Br + Be)) * 2; %for both wings
 
 W_TO = W_str + W_fuel + inits.W_AW;
 
