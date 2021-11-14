@@ -7,9 +7,9 @@ nz_max      =    2.5;
 span        =    b;         %[m]
 wing_surf   =    area;
 spar_front  =    0.2;
-spar_rear   =    0.8;
-ftank_start =    0.1;
-ftank_end   =    0.70;
+spar_rear   =    0.6;
+ftank_start =    0.2;
+ftank_end   =    0.6;
 eng_num     =    1;
 eng_ypos    =    0.359;
 eng_mass    =    4273;         %kg
@@ -34,7 +34,7 @@ c_k = c_r * tr_k;
 c_t = c_r * tr_t;
 
 
-fid = fopen('A300.init','wt');
+fid = fopen( 'A300.init','wt');
 fprintf(fid, '%g %g \n',MTOW,MZF);
 fprintf(fid, '%g \n',nz_max);
 
@@ -56,8 +56,8 @@ fprintf(fid, '%g %g %g %g \n',E_al,rho_al,Ft_al,Fc_al);
 fprintf(fid, '%g %g %g %g \n',E_al,rho_al,Ft_al,Fc_al);
 fprintf(fid, '%g %g %g %g \n',E_al,rho_al,Ft_al,Fc_al);
 
-fprintf(fid,'%g %g \n',eff_factor,pitch_rib);
-fprintf(fid,'0 \n');
+fprintf(fid, '%g %g \n',eff_factor,pitch_rib);
+fprintf(fid, '0');
 fclose(fid);
 
 %% Writing .load file
@@ -65,8 +65,6 @@ fclose(fid);
 points = linspace(0,1,15);
 L_dist = polyval(L_poly, points*b/2);
 M_dist = polyval(M_poly, points*b/2);
-
-plot(points, L_dist);
 
 fid = fopen('A300.load','wt');
 fprintf(fid, '%g %g %g \n', [points; L_dist; M_dist]);

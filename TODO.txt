@@ -5,3 +5,5 @@
 - history variables
 - is area/2?
 - profiling
+-copy vars persistent
+- q3d iters

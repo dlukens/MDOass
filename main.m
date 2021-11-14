@@ -63,10 +63,10 @@ options.Algorithm = 'sqp';
 options.PlotFcns = {'optimplotfval',@optimplotfval, @optimplotx, @optimplotfunccount};
 options.FunValCheck = 'off'; 
 options.DiffMaxChange = 0.5;           %max 50 percent change in design variable
-options.DiffMinChange = 0.01;           %min 1% change in function while gradient searching
-options.TolFun = 0.01;       % convergence criteria is when the minimized weight is withing 1 percent of original
+options.DiffMinChange = 0.05;           %min 1% change in function while gradient searching
+options.TolFun = 0.001;       % convergence criteria is when the minimized weight is withing 1 percent of original
 options.TolX = 0.0005;         % end optimization if design variable only changes by 0.05 percent
-options.TolCon = 0.001;       % constraint convergence criteria
+options.TolCon = 0.0001;       % constraint convergence criteria
 % options = optimoptions(@fmincon,'Display','iter-detailed','Algorithm','sqp', 'FunValCheck', 'off');
 copy.iter = 1;
 

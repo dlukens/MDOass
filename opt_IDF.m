@@ -6,7 +6,7 @@ global inits;
 
 fprintf('\t ---- F-count: %d/%d ---- \n\n', copy.iter, length(x)+1);
 
-copy.papi = x;
+copy.papi = x
 
 b = x(1)*inits.b;
 c_r = x(2)*inits.c_r;
@@ -42,8 +42,8 @@ MAC1 = 2/3 * c_r * (1 + tr_k + tr_k^2)/(1 + tr_k);
 MAC2 = 2/3 * c_k * (1 + tr_kt + tr_kt^2)/(1 + tr_kt);
 MAC = (MAC1*area1 + MAC2*area2)/area;
 
-CLinv = W_TO * inits.n_max / (0.5 * inits.rho * inits.V_max^2 * area * 2);
-CLvis = Ldes(W_TO, W_fuel) * inits.n_max / (0.5 * inits.rho * inits.V^2 * area * 2);
+CLinv = W_TO * 9.81 * inits.n_max / (0.5 * inits.rho * inits.V^2 * area * 2);
+CLvis = Ldes(W_TO, W_fuel) / (0.5 * inits.rho * inits.V^2 * area * 2);
 
 %% Blocks
 
@@ -63,7 +63,7 @@ fprintf('\t f = %d \n\n', f);
 copy.iter = copy.iter + 1;
 
 %% Plots
-if mod(copy.iter,4) == 0
+if mod(copy.iter,5) == 0
     figure
         subplot(2,2,[1 3])
             title('Planform')

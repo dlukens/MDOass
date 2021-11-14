@@ -11,9 +11,9 @@ z_t = tand(inits.dihedral) * b * 0.5;
 c_k = c_r * tr_k;
 c_t = c_r * tr_t;
 
-q = 0.5 * inits.rho * inits.V_max^2;
+q = 0.5 * inits.rho * inits.V^2;
 
-Re = inits.rho * inits.V_max * MAC / 1.437e-5; %[-]
+Re = inits.rho * inits.V * MAC / 1.437e-5; %[-]
 
 % Wing planform geometry 
 %                x      y       z   chord(m)    twist angle (deg) 
@@ -36,7 +36,7 @@ AC.Visc  = 0;              % 0 for inviscid and 1 for viscous analysis
 AC.Aero.MaxIterIndex = 150;    %Maximum number of Iteration for the
                                 %convergence of viscous calculation          
 % Flight Condition
-AC.Aero.V     = inits.V_max;       % flight speed (m/s)
+AC.Aero.V     = inits.V;       % flight speed (m/s)
 AC.Aero.rho   = inits.rho;         % air density  (kg/m3)
 AC.Aero.alt   = inits.h;             % flight altitude (m)
 AC.Aero.Re    = Re;        % reynolds number (based on mean aerodynamic chord) THIS CHANGES WITH MAC!!!
