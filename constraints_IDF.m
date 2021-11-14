@@ -61,14 +61,13 @@ V_tank = 1/3 * ftank_limit * b/2 * (Br + Be + sqrt(Br + Be)) * 2; %for both wing
 W_TO = W_str + W_fuel + inits.W_AW;
 
 %%
-c(1) = V_fuel/(V_tank * f_tank) - 1;
-c(2) = (W_TO / 2 * area)/(inits.W_TO/inits.area) - 1;
+c(1) = (V_tank * f_tank)/V_fuel - 1;
+c(2) = (W_TO / 2 * area)/(inits.W_TO/(inits.area*2)) - 1;
 
-ceq(1) = W_TO/copy.W_TO - 1;
-ceq(2) = W_str/copy.W_str - 1;
-ceq(3) = W_fuel/copy.W_fuel - 1;
-ceq(4) = CLCD/copy.CLCD - 1;
-ceq(5:8) = L_poly./copy.L_poly' - 1;
-ceq(9:12) = M_poly./copy.M_poly' - 1;
+ceq(1) = W_str/copy.W_str - 1;
+ceq(2) = W_fuel/copy.W_fuel - 1;
+ceq(3) = CLCD/copy.CLCD - 1;
+ceq(4:7) = L_poly./copy.L_poly' - 1;
+ceq(8:11) = M_poly./copy.M_poly' - 1;
 
 end

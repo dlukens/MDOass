@@ -1,4 +1,4 @@
-function [CL, CD] = Q3Dvis(CL, A_r, A_t, c_r, tr_k, tr_t, phi_k, phi_t, b, MAC)
+function [CL, CD] = Q3Dvis(CL, A_r, A_t, c_r, tr_k, tr_t, phi_k, phi_t, b)
 %% Aerodynamic solver setting
 global inits;
 sweep = atand((c_r - c_r*tr_k)/(b * 0.4 * 0.5));
@@ -8,10 +8,8 @@ y_k = b/2*0.4;
 y_t = b/2;
 z_k = tand(inits.dihedral) * b * 0.4 * 0.5;
 z_t = tand(inits.dihedral) * b * 0.5;
-c_k = c_r * tr_k - 0.00001;
+c_k = c_r * tr_k - 0.000001;
 c_t = c_r * tr_t;
-
-Re = inits.rho * inits.V * MAC / 1.437e-5; %[-]
 
 % Wing planform geometry 
 %                x      y       z   chord(m)    twist angle (deg) 
@@ -37,7 +35,7 @@ AC.Aero.MaxIterIndex = 150;    %Maximum number of Iteration for the
 AC.Aero.V     = inits.V;       % flight speed (m/s)
 AC.Aero.rho   = inits.rho;         % air density  (kg/m3)
 AC.Aero.alt   = inits.h;             % flight altitude (m)
-AC.Aero.Re    = Re;        % reynolds number (based on mean aerodynamic chord) THIS CHANGES WITH MAC!!!
+% AC.Aero.Re    = Re;        % reynolds number (based on mean aerodynamic chord) THIS CHANGES WITH MAC!!!
 AC.Aero.M     = inits.M;           % flight Mach number 
 AC.Aero.CL    = CL;          % lift coefficient - comment this line to run the code for given alpha%
 % AC.Aero.Alpha = 2;             % angle of attack -  comment this line to run the code for given cl 

@@ -13,8 +13,6 @@ c_t = c_r * tr_t;
 
 q = 0.5 * inits.rho * inits.V^2;
 
-Re = inits.rho * inits.V * MAC / 1.437e-5; %[-]
-
 % Wing planform geometry 
 %                x      y       z   chord(m)    twist angle (deg) 
 AC.Wing.Geom = [0       0       0     c_r         0;
@@ -39,7 +37,7 @@ AC.Aero.MaxIterIndex = 150;    %Maximum number of Iteration for the
 AC.Aero.V     = inits.V;       % flight speed (m/s)
 AC.Aero.rho   = inits.rho;         % air density  (kg/m3)
 AC.Aero.alt   = inits.h;             % flight altitude (m)
-AC.Aero.Re    = Re;        % reynolds number (based on mean aerodynamic chord) THIS CHANGES WITH MAC!!!
+% AC.Aero.Re    = Re;        % reynolds number (based on mean aerodynamic chord) THIS CHANGES WITH MAC!!!
 AC.Aero.M     = inits.M;           % flight Mach number 
 AC.Aero.CL    = CL;          % lift coefficient - comment this line to run the code for given alpha%
 % AC.Aero.Alpha = 2;             % angle of attack -  comment this line to run the code for given cl 

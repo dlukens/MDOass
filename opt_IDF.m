@@ -48,14 +48,14 @@ CLvis = Ldes(W_TO, W_fuel) / (0.5 * inits.rho * inits.V^2 * area * 2);
 
 [copy.L_poly, copy.M_poly] = Q3Dinv(CLinv, A_r, A_t, c_r, tr_k, tr_t, phi_k, phi_t, b, MAC);
 
-[copy.W_str, Yu_r, Yl_r, Yu_t, Yl_t] = EMWETmain(W_TO, W_fuel, b, c_r, tr_k, tr_t, area, A_r, A_t, L_poly, M_poly);
+[copy.W_str, copy.Yu_r, copy.Yl_r, copy.Yu_t, copy.Yl_t] = EMWETmain(W_TO, W_fuel, b, c_r, tr_k, tr_t, area, A_r, A_t, L_poly, M_poly);
 
-[CLwing, CDwing] = Q3Dvis(CLvis, A_r, A_t, c_r, tr_k, tr_t, phi_k, phi_t, b, MAC);
+[CLwing, CDwing] = Q3Dvis(CLvis, A_r, A_t, c_r, tr_k, tr_t, phi_k, phi_t, b);
 copy.CLCD = CLwing/CDwing;
  
 [copy.W_fuel, copy.V_fuel] = Breguet(W_TO, CLCD);
 
-f = double(objective(copy.W_fuel, copy.W_str));
+f = objective(copy.W_fuel, copy.W_str);
 
 t = toc;
 fprintf('f-eval %g -> \t f = %g in %gs \n', copy.iter, f, t);
@@ -63,7 +63,7 @@ fprintf('f-eval %g -> \t f = %g in %gs \n', copy.iter, f, t);
 copy.iter = copy.iter + 1;
 
 %% Plots
-if mod(copy.iter,5) == 0
+if mod(copy.iter,1) == 0
     figure
         subplot(2,2,[1 3])
             title('Planform')
@@ -80,14 +80,14 @@ if mod(copy.iter,5) == 0
         subplot(2,2,2)
             title('Root airfoil')
             hold on
-            plot(Yu_r(:,1),Yu_r(:,2),'b');
-            plot(Yl_r(:,1),Yl_r(:,2),'r');
+            plot(copy.Yu_r(:,1),copy.Yu_r(:,2),'b');
+            plot(copy.Yl_r(:,1),copy.Yl_r(:,2),'r');
             axis([0,1,-0.25,0.25])
         subplot(2,2,4)
             title('Tip Airfoil')
             hold on
-            plot(Yu_t(:,1),Yu_t(:,2),'b');
-            plot(Yl_t(:,1),Yl_t(:,2),'r');
+            plot(copy.Yu_t(:,1),copy.Yu_t(:,2),'b');
+            plot(copy.Yl_t(:,1),copy.Yl_t(:,2),'r');
             axis([0,1,-0.25,0.25])
 end
 

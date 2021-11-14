@@ -3,13 +3,10 @@ fid = fopen('n64215.dat', 'r');
 airfoil = fscanf(fid, '%g %g', [2 Inf])';
 fclose(fid);
 
-split = floor(length(airfoil)/2);
-
-airfoil_upper = airfoil(1:split-1, :);
+airfoil_upper = airfoil(1:floor(end/2), :);
 airfoil_xu = airfoil_upper(:, 1);
-airfoil_lower = airfoil(split+1:end, :);
+airfoil_lower = airfoil(1:floor(end/2)+1, :);
 airfoil_xl = airfoil_lower(:, 1);
-
 
 % Optimisation
 M = (order + 1) * 2;
@@ -39,11 +36,9 @@ A = [Au; Al];                               %potential refactor here
         Au = x(1:length(x)/2);
         Al = x(length(x)/2 + 1:length(x));
 
-        split = floor(length(airfoil)/2);
-
-        airfoil_upper = airfoil(1:split-1, :);
+        airfoil_upper = airfoil(1:floor(end/2), :);
         airfoil_xu = airfoil_upper(:, 1);
-        airfoil_lower = airfoil(split:end, :);
+        airfoil_lower = airfoil(floor(end/2)+1:end, :);
         airfoil_xl = airfoil_lower(:, 1);
 
         % Bernstein Curve
