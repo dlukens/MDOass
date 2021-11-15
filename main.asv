@@ -10,10 +10,6 @@ init;
 %% Variables
 global inits;
 
-delete *.xls;
-
-inits.iter = 1;
-
 x0 = [inits.b; 
     inits.c_r;
     inits.tr_k;
@@ -84,4 +80,57 @@ options.MaxIter         = 10;
 options.ScaleProblem    = 'false';
 options.FiniteDifferenceType = 'forward';
 
+inits.iter = 1;
+
 [x,FVAL,EXITFLAG,OUTPUT] = fmincon(@(x)opt_IDF(x),x0,[],[],[],[],lb,ub,@(x)constraints_IDF(x),options);
+
+%% Plotting
+
+b = x(1)*inits.b;
+c_r = x(2)*inits.c_r;
+tr_k = x(3)*inits.tr_k;
+tr_t = x(4)*inits.tr_t;
+phi_k = x(5)*inits.phi_k;
+phi_t = x(6)*inits.phi_t;
+A_r = x(7:18).*inits.A;
+A_t = x(19:30).*inits.A;
+W_str = x(31)*inits.W_str;
+W_fuel = x(32)*inits.W_fuel;
+CLCD = x(33)*inits.CLCD;
+L_poly = x(34:37).*inits.L_poly';
+M_poly = x(38:end).*inits.M_poly';
+
+sweep = atand((c_r - c_r*tr_k)/(b * 0.4 * 0.5));
+x_t = tand(sweep) * b/2;
+x_k = tand(sweep) * b/2*0.4;
+y_k = b/2*0.4;
+y_t = b/2;
+c_k = c_r * tr_k;
+c_t = c_r * tr_t;
+tr_kt = tr_t / tr_k;
+
+figure
+    subplot(2,2,[1 3])
+        title('Planform')
+        hold on
+        axis ij
+        axis equal
+        %    [y1, y2],    [x1,x2]
+        plot([0,    y_k], [0,          x_k]);
+        plot([y_k,  y_t], [x_k,        x_t]);
+        plot([y_t,  y_t], [x_t,  x_t + c_t]);
+        plot([y_t,  y_k], [x_t + c_t,  c_r]);
+        plot([y_k,  0],   [c_r,        c_r]);
+        axis([0,26,0,20])
+    subplot(2,2,2)
+        title('Root airfoil')
+        hold on
+        plot(copy.Yu_r(:,1),copy.Yu_r(:,2),'b');
+        plot(copy.Yl_r(:,1),copy.Yl_r(:,2),'r');
+        axis([0,1,-0.25,0.25])
+    subplot(2,2,4)
+        title('Tip Airfoil')
+        hold on
+        plot(copy.Yu_t(:,1),copy.Yu_t(:,2),'b');
+        plot(copy.Yl_t(:,1),copy.Yl_t(:,2),'r');
+        axis([0,1,-0.25,0.25])

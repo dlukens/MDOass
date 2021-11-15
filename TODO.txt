@@ -1,9 +1,0 @@
-- minimize variables
-- compute fuel tank volume right
-- get rid of inits eventually
-- rescale airfoil for t/c ratio
-- history variables
-- is area/2?
-- profiling
--copy vars persistent
-- q3d iters
